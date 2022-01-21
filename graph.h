@@ -3,6 +3,13 @@
 
 
 class Graph{
+private:
+    enum class TraverseAlgorithm
+    {
+        DFS,
+        BFS
+    };
+        
 //setters
 public:
     void addNode();
@@ -19,6 +26,9 @@ public:
 
 //utility functions
 public:
+    void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
+    std::vector< bool >));
+    unsigned int countCycles();
 
 //constructors & destructors
 public:

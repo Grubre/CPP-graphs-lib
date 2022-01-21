@@ -63,6 +63,22 @@ unsigned int Graph::size() const
 }
 
 
+//==================utility====================
+void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( unsigned int, 
+    std::vector< bool >))
+{
+    switch(alg)
+    {
+        case TraverseAlgorithm::DFS:
+
+        break;
+        case TraverseAlgorithm::BFS:
+        
+        break;
+    }
+}
+
+
 //==================contructors & destructors====================
 Graph::Graph() : m_size(0)
 {
@@ -70,7 +86,6 @@ Graph::Graph() : m_size(0)
 }
 
 
-//==================utility====================
 Graph::Graph(unsigned int _size) : m_size(_size)
 {
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));
