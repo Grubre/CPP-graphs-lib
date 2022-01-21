@@ -10,11 +10,11 @@ public:
 
     void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
     void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
-
-    void printAdjacencyMatrix();
 //getters
 public:
     unsigned int size() const;
+
+    void printAdjacencyMatrix() const;
 //constructors & destructors
 public:
     Graph();
@@ -27,5 +27,5 @@ protected:
 protected:
     unsigned int m_size;
 
-    std::vector<std::vector<bool>> m_AdjacencyMatrix;
+    std::vector< std::vector< bool > > m_AdjacencyMatrix;
 };

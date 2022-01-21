@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-//=========setters===========
+//==================setters====================
 void Graph::addNode()
 {
     for(int i = 0; i < m_size; i++)
@@ -43,7 +43,7 @@ void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
 }
 
 
-void Graph::printAdjacencyMatrix()
+void Graph::printAdjacencyMatrix() const
 {
     for(int i = 0; i < m_size; i++)
     {
