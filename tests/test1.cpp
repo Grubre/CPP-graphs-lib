@@ -3,14 +3,17 @@
 
 int main()
 {
-    Graph a;
+    Graph a, b(10);
     a.addNode();
     a.addNode();
     a.addNode();
     a.addVertex(0,1,true);
-    a.printAdjacencyList();
+    a.printAdjacencyMatrix();
     a.removeNode(1);
-    a.printAdjacencyList();
+    a.printAdjacencyMatrix();
     std::cout << a.size() << std::endl;
+    b.addNode();
+    b.addVertex(5,10);
+    b.printAdjacencyMatrix();
     return 0;
 }

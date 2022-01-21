@@ -5,17 +5,13 @@
 class Graph{
 //setters
 public:
-    void addNode(int value = 0);
+    void addNode();
     void removeNode(int id);
-    void removeNodesByValue(int value);
-    void setNodeValue(int id, int value);
 
-    void addVertex(int NodeAID, int NodeBID, bool twoWay = true, int value = 0);
+    void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
     void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
-    void removeVertexesByValue(int value);
-    void setVertexValue(int NodeAID, int NodeBID, int value);
 
-    void printAdjacencyList();
+    void printAdjacencyMatrix();
 //getters
 public:
     unsigned int size() const;
@@ -31,5 +27,5 @@ private:
 private:
     unsigned int m_size;
 
-    std::vector<std::vector<bool>> m_AdjacencyList;
+    std::vector<std::vector<bool>> m_AdjacencyMatrix;
 };
