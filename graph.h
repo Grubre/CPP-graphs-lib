@@ -10,18 +10,21 @@ public:
 
     void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
     void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
+
 //getters
 public:
     unsigned int size() const;
 
     void printAdjacencyMatrix() const;
+
+//utility functions
+public:
+
 //constructors & destructors
 public:
     Graph();
     Graph(unsigned int _size);
     ~Graph();
-//utility functions
-protected:
 
 //variables
 protected:

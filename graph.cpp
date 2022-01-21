@@ -56,21 +56,21 @@ void Graph::printAdjacencyMatrix() const
 }
 
 
-//=========getters===========
+//==================getters====================
 unsigned int Graph::size() const
 {
     return m_size;
 }
 
 
-//=========contructors & destructors===========
+//==================contructors & destructors====================
 Graph::Graph() : m_size(0)
 {
 
 }
 
 
-//=========utility===========
+//==================utility====================
 Graph::Graph(unsigned int _size) : m_size(_size)
 {
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));

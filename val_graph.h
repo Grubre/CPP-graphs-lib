@@ -15,17 +15,20 @@ public:
     void addVertex(int NodeAID, int NodeBID, T_vertex value, bool twoWay = true);
     void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
     void setVertexValue(int NodeAID, int NodeBID, T_node value, bool twoWay = true);
+
 //getters
 public:
     T_node getNodeValue(int id) { return m_NodeValues[id]; }
     T_node getVertexValue(int NodeAID, int NodeBID) { return m_VertexValues[NodeAID][NodeBID]; }
+
+//utility functions
+public:
+
 //constructors & destructors
 public:
     Val_Graph();
     Val_Graph(unsigned int _size);
     ~Val_Graph();
-//utility functions
-protected:
 
 //variables
 protected:
@@ -33,6 +36,10 @@ protected:
     std::vector< std::vector< T_vertex > > m_VertexValues;
 };
 
+
+//==================FUNCTION DECLARATIONS====================
+
+//==================setters====================
 template <class T_node, class T_vertex>
 void Val_Graph<T_node, T_vertex>::addNode()
 {
@@ -92,7 +99,11 @@ void Val_Graph<T_node, T_vertex>::setVertexValue(int NodeAID, int NodeBID, T_nod
         m_VertexValues[NodeBID][NodeAID] = value;
 }
 
+//==================getters====================
 
+//==================utility====================
+
+//==================constructors & destructors====================
 template <class T_node, class T_vertex>
 Val_Graph<T_node, T_vertex>::Val_Graph() : Graph() { }
 
