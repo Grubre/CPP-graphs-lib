@@ -21,10 +21,10 @@ public:
     Graph(unsigned int _size);
     ~Graph();
 //utility functions
-private:
+protected:
 
 //variables
-private:
+protected:
     unsigned int m_size;
 
     std::vector<std::vector<bool>> m_AdjacencyMatrix;
