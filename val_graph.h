@@ -6,6 +6,12 @@
 template <class T_node, class T_vertex>
 class Val_Graph : public Graph
 {
+private:
+enum class TraverseAlgorithm
+{
+    DFS,
+    BFS
+};
 //setters
 public:
     void addNode();
