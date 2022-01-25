@@ -30,7 +30,14 @@ public:
 public:
     void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
     std::vector< bool >));
-    unsigned int countCycles();
+
+    int minEdgeCount(int NodeAID, int NodeBID); // TO DO
+
+    bool isCyclic();
+
+//private utility functions
+private:
+    bool isCyclicUtil(int v, std::vector <bool> &visited, int parent);
 
 //constructors & destructors
 public:
@@ -43,6 +50,7 @@ protected:
     unsigned int m_size;
 
     bool m_isUndirected;
+    bool m_isWeighted;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
 };

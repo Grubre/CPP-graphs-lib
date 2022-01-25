@@ -40,6 +40,8 @@ public:
 protected:
     std::vector<T_node> m_NodeValues;
     std::vector< std::vector< T_vertex > > m_VertexValues;
+
+    bool m_IsSymetricallyValued;
 };
 
 
@@ -111,11 +113,11 @@ void Val_Graph<T_node, T_vertex>::setVertexValue(int NodeAID, int NodeBID, T_nod
 
 //==================constructors & destructors====================
 template <class T_node, class T_vertex>
-Val_Graph<T_node, T_vertex>::Val_Graph() : Graph() { }
+Val_Graph<T_node, T_vertex>::Val_Graph() : Graph(), m_IsSymetricallyValued(1) { }
 
 
 template <class T_node, class T_vertex>
-Val_Graph<T_node, T_vertex>::Val_Graph(unsigned int _size) : Graph(_size)
+Val_Graph<T_node, T_vertex>::Val_Graph(unsigned int _size) : Graph(_size), m_IsSymetricallyValued(1)
 {
     m_NodeValues.resize(m_size);
     m_VertexValues.resize(m_size, std::vector<T_vertex>(m_size));

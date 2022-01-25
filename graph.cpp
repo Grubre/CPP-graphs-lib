@@ -99,6 +99,50 @@ void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( un
 }
 
 
+bool Graph::isCyclic()
+{
+    std::vector<bool> visited(m_size,0);
+    if(m_isUndirected)
+    {
+        for(int u = 0; u < m_size; u++)
+        {
+            if(!visited[u])
+            {
+                if(isCyclicUtil(u,visited,-1))
+                    return true;
+            }
+        }
+    }
+    else
+    {
+        
+    }
+    return false;
+}
+
+
+//==================private utility functions====================
+bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
+{
+    visited[v] = true;
+
+    for(int i = 0; i < m_size; i++)
+    {
+        if(m_AdjacencyMatrix[v][i])
+        {
+            if(!visited[i])
+            {
+                if(isCyclicUtil(i, visited, v))
+                    return true;
+            }
+            else if(i != parent)
+                return true;
+        }
+        
+    }
+    return false;
+}
+
 //==================contructors & destructors====================
 Graph::Graph() : m_size(0), m_isUndirected(0)
 {
