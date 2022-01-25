@@ -13,24 +13,24 @@ void Graph::addNode()
     m_AdjacencyMatrix.push_back(std::vector<bool>(m_size, false));
 
     // after adding a new node the graph is disconnected
-    m_isDisconnected = true;
+    m_isConnected = false;
 }
 
 
-void Graph::addNode(const std::vector<int> &neighborIDs)
+void Graph::addNode(const std::vector<int> &neighborIDs, bool twoWay)
 {
     std::vector<bool> neighborVector(m_size+1,0);
     for(auto i : neighborIDs)
         neighborVector[i] = true;
     for(int i = 0; i < m_size; i++)
     {
-        m_AdjacencyMatrix[i].push_back(neighborVector[i]);
+        m_AdjacencyMatrix[i].push_back(twoWay && neighborVector[i]);
     }
     m_size++;
     m_AdjacencyMatrix.push_back(neighborVector);
 
-    // after adding a new node the graph is disconnected
-    m_isDisconnected = true;
+    // after adding a new node with init list we check whether the graph is disconnected
+    m_isConnected = isConnected();
 }
 
 
@@ -46,7 +46,7 @@ void Graph::removeNode(int id)
     }
 
     // after removing a node we check whether the graph is disconnected
-    m_isDisconnected = isDisconnected();
+    m_isConnected = isConnected();
 }
 
 
@@ -58,7 +58,7 @@ void Graph::addVertex(int NodeAID, int NodeBID, bool twoWay)
 
     // after adding a new vertex we check whether the graph is directed or/and disconnected
     m_isUndirected = isUndirected();
-    m_isDisconnected = isDisconnected();
+    m_isConnected = isConnected();
 }
 
 
@@ -70,7 +70,7 @@ void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
 
     // after removing a vertex we check whether the graph is directed or/and disconnected
     m_isUndirected = isUndirected();
-    m_isDisconnected = isDisconnected();
+    m_isConnected = isConnected();
 }
 
 
@@ -130,8 +130,43 @@ bool Graph::isCyclic()
 }
 
 
-bool Graph::isDisconnected()
+bool Graph::isConnected()
 {
+    if(m_isUndirected)
+    {
+        std::vector<bool> visited(m_size,false);
+        std::queue<int> to_visit;
+        to_visit.push(0);
+        while(!to_visit.empty())
+        {
+            int id = to_visit.front();
+            visited[id] = true;
+            for(int i = 0; i < m_size; i++)
+            {
+                if(!visited[i] && m_AdjacencyMatrix[id][i])
+                {
+                    to_visit.push(i);
+                }
+            }
+            to_visit.pop();
+        }
+        for(int i = 0; i < m_size; i++)
+            if(!visited[i])
+                return false;
+    }
+    else
+    {
+        std::vector<bool> visited1(m_size,false);
+        std::vector<bool> visited2(m_size,false);
+
+        std::queue<int> to_visit;
+        isConnectedUtil(visited1, false);
+        isConnectedUtil(visited2, true);
+
+        for(int i = 0; i < m_size; i++)
+            if(!visited1[i] && !visited2[i])
+                return false; 
+    }
     return true;
 }
 
@@ -174,18 +209,39 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
     return false;
 }
 
+
+void Graph::isConnectedUtil(std::vector <bool> &visited, bool reverse)
+{
+    std::queue<int> to_visit;
+    to_visit.push(0);
+    while(!to_visit.empty())
+    {
+        int id = to_visit.front();
+        visited[id] = true;
+        for(int i = 0; i < m_size; i++)
+        {
+            if(!visited[i] && (m_AdjacencyMatrix[id][i] || (m_AdjacencyMatrix[i][id] && reverse)))
+            {
+                to_visit.push(i);
+            }
+        }
+        to_visit.pop();
+    }
+}
+
+
 //==================contructors & destructors====================
 Graph::Graph() : m_size(0)
 {
-    m_isUndirected = 0;
-    m_isDisconnected = 0;
+    m_isUndirected = true;
+    m_isConnected = true;
 }
 
 
 Graph::Graph(unsigned int _size) : m_size(_size)
 {
-    m_isUndirected = 0;
-    m_isDisconnected = (m_size > 1);
+    m_isUndirected = true;
+    m_isConnected = (m_size <= 1);
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));
 }
 

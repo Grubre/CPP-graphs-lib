@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <queue>
 
 
 class Graph{
@@ -13,7 +14,7 @@ private:
 //setters
 public:
     void addNode();
-    void addNode(const std::vector<int> &neighborIDs);
+    void addNode(const std::vector<int> &neighborIDs, bool twoWay = true);
     void removeNode(int id);
 
     void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
@@ -27,7 +28,7 @@ public:
 
     bool isUndirected() const;
     bool isCyclic();
-    bool isDisconnected();
+    bool isConnected();
 
 //utility functions
 public:
@@ -39,6 +40,9 @@ public:
 //private utility functions
 private:
     bool isCyclicUtil(int v, std::vector <bool> &visited, int parent);
+    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, int parent);
+
+    void isConnectedUtil(std::vector <bool> &visited, bool reverse);
 
 //constructors & destructors
 public:
@@ -51,7 +55,7 @@ protected:
     unsigned int m_size;
 
     bool m_isUndirected;
-    bool m_isDisconnected;
+    bool m_isConnected;
     bool m_isWeighted;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
