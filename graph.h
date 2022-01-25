@@ -13,6 +13,7 @@ private:
 //setters
 public:
     void addNode();
+    void addNode(const std::vector<int> &neighborIDs);
     void removeNode(int id);
 
     void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
@@ -25,6 +26,8 @@ public:
     void printAdjacencyMatrix() const;
 
     bool isUndirected() const;
+    bool isCyclic();
+    bool isDisconnected();
 
 //utility functions
 public:
@@ -32,8 +35,6 @@ public:
     std::vector< bool >));
 
     int minEdgeCount(int NodeAID, int NodeBID); // TO DO
-
-    bool isCyclic();
 
 //private utility functions
 private:
@@ -50,6 +51,7 @@ protected:
     unsigned int m_size;
 
     bool m_isUndirected;
+    bool m_isDisconnected;
     bool m_isWeighted;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;

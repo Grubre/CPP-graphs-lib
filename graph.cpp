@@ -11,6 +11,26 @@ void Graph::addNode()
     }
     m_size++;
     m_AdjacencyMatrix.push_back(std::vector<bool>(m_size, false));
+
+    // after adding a new node the graph is disconnected
+    m_isDisconnected = true;
+}
+
+
+void Graph::addNode(const std::vector<int> &neighborIDs)
+{
+    std::vector<bool> neighborVector(m_size+1,0);
+    for(auto i : neighborIDs)
+        neighborVector[i] = true;
+    for(int i = 0; i < m_size; i++)
+    {
+        m_AdjacencyMatrix[i].push_back(neighborVector[i]);
+    }
+    m_size++;
+    m_AdjacencyMatrix.push_back(neighborVector);
+
+    // after adding a new node the graph is disconnected
+    m_isDisconnected = true;
 }
 
 
@@ -24,6 +44,9 @@ void Graph::removeNode(int id)
     {
         m_AdjacencyMatrix[i].erase(m_AdjacencyMatrix[i].begin()+id);
     }
+
+    // after removing a node we check whether the graph is disconnected
+    m_isDisconnected = isDisconnected();
 }
 
 
@@ -33,8 +56,9 @@ void Graph::addVertex(int NodeAID, int NodeBID, bool twoWay)
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = true;
 
-    // after adding a new vertex we check whether the graph is directed
+    // after adding a new vertex we check whether the graph is directed or/and disconnected
     m_isUndirected = isUndirected();
+    m_isDisconnected = isDisconnected();
 }
 
 
@@ -44,8 +68,9 @@ void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = false;
 
-    // after removing a vertex we check whether the graph is directed
+    // after removing a vertex we check whether the graph is directed or/and disconnected
     m_isUndirected = isUndirected();
+    m_isDisconnected = isDisconnected();
 }
 
 
@@ -83,22 +108,6 @@ bool Graph::isUndirected() const
 }
 
 
-//==================utility====================
-void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( unsigned int, 
-    std::vector< bool >))
-{
-    switch(alg)
-    {
-        case TraverseAlgorithm::DFS:
-
-        break;
-        case TraverseAlgorithm::BFS:
-        
-        break;
-    }
-}
-
-
 bool Graph::isCyclic()
 {
     std::vector<bool> visited(m_size,0);
@@ -115,9 +124,31 @@ bool Graph::isCyclic()
     }
     else
     {
-        
+        std::vector<bool> recStack(m_size,0);
     }
     return false;
+}
+
+
+bool Graph::isDisconnected()
+{
+    return true;
+}
+
+
+//==================utility====================
+void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( unsigned int, 
+    std::vector< bool >))
+{
+    switch(alg)
+    {
+        case TraverseAlgorithm::DFS:
+
+        break;
+        case TraverseAlgorithm::BFS:
+        
+        break;
+    }
 }
 
 
@@ -144,14 +175,17 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
 }
 
 //==================contructors & destructors====================
-Graph::Graph() : m_size(0), m_isUndirected(0)
+Graph::Graph() : m_size(0)
 {
-
+    m_isUndirected = 0;
+    m_isDisconnected = 0;
 }
 
 
-Graph::Graph(unsigned int _size) : m_size(_size), m_isUndirected(0)
+Graph::Graph(unsigned int _size) : m_size(_size)
 {
+    m_isUndirected = 0;
+    m_isDisconnected = (m_size > 1);
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));
 }
 
