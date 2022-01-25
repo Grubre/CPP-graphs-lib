@@ -32,6 +32,9 @@ void Graph::addVertex(int NodeAID, int NodeBID, bool twoWay)
     m_AdjacencyMatrix[NodeAID][NodeBID] = true;
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = true;
+
+    // after adding a new vertex we check whether the graph is directed
+    m_isUndirected = isUndirected();
 }
 
 
@@ -40,6 +43,16 @@ void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
     m_AdjacencyMatrix[NodeAID][NodeBID] = false;
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = false;
+
+    // after removing a vertex we check whether the graph is directed
+    m_isUndirected = isUndirected();
+}
+
+
+//==================getters====================
+unsigned int Graph::size() const
+{
+    return m_size;
 }
 
 
@@ -56,10 +69,17 @@ void Graph::printAdjacencyMatrix() const
 }
 
 
-//==================getters====================
-unsigned int Graph::size() const
+bool Graph::isUndirected() const
 {
-    return m_size;
+    for(int i = 0; i < m_size; i++)
+    {
+        for(int j = 0; j < m_size; j++)
+        {
+            if(m_AdjacencyMatrix[i][j] != m_AdjacencyMatrix[j][i])
+                return false;
+        }
+    }
+    return true;
 }
 
 
@@ -80,13 +100,13 @@ void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( un
 
 
 //==================contructors & destructors====================
-Graph::Graph() : m_size(0)
+Graph::Graph() : m_size(0), m_isUndirected(0)
 {
 
 }
 
 
-Graph::Graph(unsigned int _size) : m_size(_size)
+Graph::Graph(unsigned int _size) : m_size(_size), m_isUndirected(0)
 {
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));
 }

@@ -24,6 +24,8 @@ public:
 
     void printAdjacencyMatrix() const;
 
+    bool isUndirected() const;
+
 //utility functions
 public:
     void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
@@ -39,6 +41,8 @@ public:
 //variables
 protected:
     unsigned int m_size;
+
+    bool m_isUndirected;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
 };
