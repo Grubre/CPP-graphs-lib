@@ -44,6 +44,8 @@ private:
 
     void isConnectedUtil(std::vector <bool> &visited, bool reverse);
 
+    void update();
+
 //constructors & destructors
 public:
     Graph();

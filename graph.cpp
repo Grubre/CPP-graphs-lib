@@ -13,7 +13,8 @@ void Graph::addNode()
     m_AdjacencyMatrix.push_back(std::vector<bool>(m_size, false));
 
     // after adding a new node the graph is disconnected
-    m_isConnected = false;
+    // unless it's size was 0
+    m_isConnected = (m_size == 1);
 }
 
 
@@ -258,6 +259,12 @@ void Graph::isConnectedUtil(std::vector <bool> &visited, bool reverse)
     }
 }
 
+
+void Graph::update()
+{
+    m_isConnected = isConnected();
+    m_isUndirected = isUndirected();
+}
 
 //==================contructors & destructors====================
 Graph::Graph() : m_size(0)
