@@ -1,7 +1,0 @@
-  TO DO:
-# wypisać rodzaje grafów i porównać ich właściwości:
-skierowany, nieskierowany
-Następnie przejrzeć podstawowe algorytmy grafowe i
-sprawdzić z jakich wlasności korzystają:
-szukanie najkrótszej ścieżki, DFS, BFS, zliczanie cykli itd.
-Na końcu, stworzenie hierarchi klas na bazie wspólnych właściwości.

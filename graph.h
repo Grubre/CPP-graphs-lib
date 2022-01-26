@@ -33,14 +33,14 @@ public:
 //utility functions
 public:
     void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
-    std::vector< bool >));
+    std::vector< bool >)); // TO DO
 
     int minEdgeCount(int NodeAID, int NodeBID); // TO DO
 
 //private utility functions
 private:
     bool isCyclicUtil(int v, std::vector <bool> &visited, int parent);
-    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, int parent);
+    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack);
 
     void isConnectedUtil(std::vector <bool> &visited, bool reverse);
 

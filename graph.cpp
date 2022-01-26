@@ -30,6 +30,7 @@ void Graph::addNode(const std::vector<int> &neighborIDs, bool twoWay)
     m_AdjacencyMatrix.push_back(neighborVector);
 
     // after adding a new node with init list we check whether the graph is disconnected
+    m_isUndirected = isUndirected();
     m_isConnected = isConnected();
 }
 
@@ -125,6 +126,15 @@ bool Graph::isCyclic()
     else
     {
         std::vector<bool> recStack(m_size,0);
+        for(int u = 0; u < m_size; u++)
+        {
+            if(!visited[u])
+            {
+                if(isCyclicUtilDirected(u,visited, recStack))
+                    return true;
+            }
+        }
+        // TO DO
     }
     return false;
 }
@@ -196,16 +206,35 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
     {
         if(m_AdjacencyMatrix[v][i])
         {
-            if(!visited[i])
+            if(!visited[i] && isCyclicUtil(i, visited, v))
             {
-                if(isCyclicUtil(i, visited, v))
-                    return true;
+                return true;
             }
             else if(i != parent)
                 return true;
         }
-        
     }
+    return false;
+}
+
+
+bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack)
+{
+    visited[v] = true;
+    recStack[v] = true;
+    for(int i = 0; i < m_size; i++)
+    {
+        if(m_AdjacencyMatrix[v][i])
+        {
+            if(!visited[i] && isCyclicUtilDirected(i, visited, recStack))
+            {
+                return true;
+            }
+            else if(recStack[i])
+                return true;
+        }
+    }
+    recStack[v] = false;
     return false;
 }
 
