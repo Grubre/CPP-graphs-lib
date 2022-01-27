@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <queue>
+#include <stack>
 
 
 class Graph{
@@ -20,29 +21,32 @@ public:
     void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
     void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
 
-//getters
+//variable getters
 public:
     unsigned int size() const;
-
-    void printAdjacencyMatrix() const;
-
     bool isUndirected() const;
+    bool isConnected() const;
+
+//algorithmic getters
     bool isCyclic();
-    bool isConnected();
+    int minEdgeCount(int NodeAID, int NodeBID); // TO DO FOR DIRECTED
 
 //utility functions
 public:
     void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
     std::vector< bool >)); // TO DO
 
-    int minEdgeCount(int NodeAID, int NodeBID); // TO DO FOR DIRECTED
+    void printAdjacencyMatrix() const;
 
 //private utility functions
 private:
+    bool isConnectedCheck(); // algorithm that checks whether the graph is connected
+    bool isUndirectedCheck() const; // algorithm that checks whether the graph is undirected
+
+    void isConnectedCheckUtil(std::vector <bool> &visited, bool reverse);
+
     bool isCyclicUtil(int v, std::vector <bool> &visited, int parent);
     bool isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack);
-
-    void isConnectedUtil(std::vector <bool> &visited, bool reverse);
 
     void update();
 
