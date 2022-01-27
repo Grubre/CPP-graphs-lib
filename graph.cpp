@@ -31,8 +31,8 @@ void Graph::addNode(const std::vector<int> &neighborIDs, bool twoWay)
     m_AdjacencyMatrix.push_back(neighborVector);
 
     // after adding a new node with init list we check whether the graph is disconnected
-    m_isUndirected = isUndirected();
-    m_isConnected = isConnected();
+    // and/or directed
+    update();
 }
 
 
@@ -59,8 +59,7 @@ void Graph::addVertex(int NodeAID, int NodeBID, bool twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = true;
 
     // after adding a new vertex we check whether the graph is directed or/and disconnected
-    m_isUndirected = isUndirected();
-    m_isConnected = isConnected();
+    update();
 }
 
 
@@ -71,8 +70,7 @@ void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = false;
 
     // after removing a vertex we check whether the graph is directed or/and disconnected
-    m_isUndirected = isUndirected();
-    m_isConnected = isConnected();
+    update();
 }
 
 
@@ -163,7 +161,10 @@ bool Graph::isConnected()
         }
         for(int i = 0; i < m_size; i++)
             if(!visited[i])
-                return false;
+            {
+                m_isConnected = false;
+                return false; 
+            }
     }
     else
     {
@@ -176,8 +177,12 @@ bool Graph::isConnected()
 
         for(int i = 0; i < m_size; i++)
             if(!visited1[i] && !visited2[i])
-                return false; 
+            {
+                m_isConnected = false;
+                return false;
+            }
     }
+    m_isConnected = true;
     return true;
 }
 
