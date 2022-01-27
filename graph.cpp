@@ -146,15 +146,17 @@ bool Graph::isConnected()
         std::vector<bool> visited(m_size,false);
         std::queue<int> to_visit;
         to_visit.push(0);
+        visited[0] = true;
         while(!to_visit.empty())
         {
             int id = to_visit.front();
-            visited[id] = true;
+            
             for(int i = 0; i < m_size; i++)
             {
                 if(!visited[i] && m_AdjacencyMatrix[id][i])
                 {
                     to_visit.push(i);
+                    visited[i] = true;
                 }
             }
             to_visit.pop();
@@ -203,6 +205,44 @@ void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( un
 }
 
 
+int Graph::minEdgeCount(int NodeAID, int NodeBID)
+{
+    int dist;
+    if(m_isUndirected)
+    {
+        std::vector<bool> visited(m_size, false);
+        std::vector<int> distance(m_size, 0);
+        
+        std::queue <int> to_visit;
+        distance[NodeAID] = 0;
+    
+        to_visit.push(NodeAID);
+        visited[NodeAID] = true;
+
+        while (!to_visit.empty())
+        {
+            int id = to_visit.front();
+            to_visit.pop();
+
+            for(int i = 0; i < m_size; i++)
+            {
+                if(visited[i] || !m_AdjacencyMatrix[id][i])
+                    continue;
+
+                distance[i] = distance[id] + 1;
+                to_visit.push(i);
+                visited[i] = true;
+            }
+        }
+        dist = distance[NodeBID];
+    }
+    else
+    {
+        std::cout << "Edge count is not implemented yet for directed graphs" << std::endl;
+    }
+    return dist;
+}
+
 //==================private utility functions====================
 bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
 {
@@ -249,15 +289,17 @@ void Graph::isConnectedUtil(std::vector <bool> &visited, bool reverse)
 {
     std::queue<int> to_visit;
     to_visit.push(0);
+    visited[0] = true;
     while(!to_visit.empty())
     {
         int id = to_visit.front();
-        visited[id] = true;
+        
         for(int i = 0; i < m_size; i++)
         {
             if(!visited[i] && (m_AdjacencyMatrix[id][i] || (m_AdjacencyMatrix[i][id] && reverse)))
             {
                 to_visit.push(i);
+                visited[i] = true;
             }
         }
         to_visit.pop();

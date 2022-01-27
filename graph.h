@@ -35,7 +35,7 @@ public:
     void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
     std::vector< bool >)); // TO DO
 
-    int minEdgeCount(int NodeAID, int NodeBID); // TO DO
+    int minEdgeCount(int NodeAID, int NodeBID); // TO DO FOR DIRECTED
 
 //private utility functions
 private:
