@@ -373,5 +373,5 @@ Graph::Graph(unsigned int _size) : m_size(_size)
 
 Graph::~Graph()
 {
-
+    
 }

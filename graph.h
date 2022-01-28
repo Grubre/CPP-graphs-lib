@@ -35,7 +35,7 @@ public:
 //utility functions
 public:
     void traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
-    int startingPointID = 0); // TO DO
+    int startingPointID = 0);
 
     void printAdjacencyMatrix() const;
 

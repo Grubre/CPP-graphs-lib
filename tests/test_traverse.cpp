@@ -14,9 +14,11 @@ int main()
     {
         std::cout << id << " ";
     };
+
     std::cout << "DFS: " << std::endl;;
     a.traverse(Graph::TraverseAlgorithm::DFS, lambdaPrint);
     std::cout << std::endl << "BFS: " << std::endl;;
     a.traverse(Graph::TraverseAlgorithm::BFS, lambdaPrint);
+    
     return 0;
 }
