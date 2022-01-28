@@ -2,10 +2,11 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <functional>
 
 
 class Graph{
-private:
+public:
     enum class TraverseAlgorithm
     {
         DFS,
@@ -29,14 +30,20 @@ public:
 
 //algorithmic getters
     bool isCyclic();
-    int minEdgeCount(int NodeAID, int NodeBID); // TO DO FOR DIRECTED
+    int minEdgeCount(int NodeAID, int NodeBID);
 
 //utility functions
 public:
-    void traverse(TraverseAlgorithm alg, int startingPointID, void(*func)(unsigned int, 
-    std::vector< bool >)); // TO DO
+    void traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
+    int startingPointID = 0); // TO DO
 
     void printAdjacencyMatrix() const;
+
+//constructors & destructors
+public:
+    Graph();
+    Graph(unsigned int _size);
+    ~Graph();
 
 //private utility functions
 private:
@@ -50,11 +57,7 @@ private:
 
     void update();
 
-//constructors & destructors
-public:
-    Graph();
-    Graph(unsigned int _size);
-    ~Graph();
+    bool isWithinBounds(int id);
 
 //variables
 protected:

@@ -152,17 +152,63 @@ int Graph::minEdgeCount(int NodeAID, int NodeBID)
 
 
 //==================utility====================
-void Graph::traverse(TraverseAlgorithm alg, int startingPointID, void(*func)( unsigned int, 
-    std::vector< bool >))
+void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
+    int startingPointID)
 {
     switch(alg)
     {
         case TraverseAlgorithm::DFS:
+        {
+            std::vector<int> visited(m_size,0);
+            std::stack<int> to_visit;
 
-        break;
-        case TraverseAlgorithm::BFS:
+            to_visit.push(startingPointID);
+
+            while (!to_visit.empty())
+            {
+                int id = to_visit.top();
+                to_visit.pop();
         
-        break;
+                if (!visited[id])
+                {
+                    func(id,m_AdjacencyMatrix[id]);
+                    visited[id] = true;
+                }
+        
+                for(int i = 0; i < m_size; i++)
+                {
+                    if(!visited[i] && m_AdjacencyMatrix[id][i])
+                        to_visit.push(i);
+                }
+            }
+            break;
+        }
+        case TraverseAlgorithm::BFS:
+        {
+            std::vector<int> visited(m_size,0);
+            std::queue<int> to_visit;
+
+            to_visit.push(startingPointID);
+            visited[startingPointID] = true;
+        
+            while (!to_visit.empty())
+            {
+                int id = to_visit.front();
+                to_visit.pop();
+
+                func(id,m_AdjacencyMatrix[id]);
+        
+                for(int i = 0; i < m_size; i++)
+                {
+                    if(!visited[i] && m_AdjacencyMatrix[id][i])
+                    {
+                        to_visit.push(i);
+                        visited[i] = true;
+                    }
+                }
+            }
+            break;
+        }
     }
 }
 
@@ -301,6 +347,12 @@ void Graph::update()
 {
     m_isUndirected = isUndirectedCheck();
     m_isConnected = isConnectedCheck();
+}
+
+
+bool Graph::isWithinBounds(int id)
+{
+    return (id >= 0 && id < m_size);
 }
 
 //==================contructors & destructors====================
