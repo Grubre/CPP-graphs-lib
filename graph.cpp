@@ -87,10 +87,14 @@ bool Graph::isConnected() const
 {
     return m_isConnected;
 }
+std::vector< std::vector< bool > > Graph::getAdjacencyMatrix() const
+{
+    return m_AdjacencyMatrix;
+}
 
 
 //==================variable getters====================
-bool Graph::isCyclic()
+bool Graph::isCyclic() const
 {
     std::vector<bool> visited(m_size,0);
     if(m_isUndirected)
@@ -121,7 +125,7 @@ bool Graph::isCyclic()
 }
 
 
-int Graph::minEdgeCount(int NodeAID, int NodeBID)
+int Graph::minEdgeCount(int NodeAID, int NodeBID) const
 {
     std::vector<bool> visited(m_size, false);
     std::vector<int> distance(m_size, -1);
@@ -151,9 +155,22 @@ int Graph::minEdgeCount(int NodeAID, int NodeBID)
 }
 
 
+std::vector<int> Graph::getNeighbors(int id) const
+{
+    std::vector<int> neighborList;
+    for(int i = 0; i < m_size; i++)
+    {
+        if(m_AdjacencyMatrix[id][i])
+        {
+            neighborList.push_back(i);
+        }
+    }
+    return neighborList;
+}
+
 //==================utility====================
 void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
-    int startingPointID)
+    int startingPointID) const
 {
     switch(alg)
     {
@@ -274,7 +291,7 @@ bool Graph::isConnectedCheck()
 }
 
 
-bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
+bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent) const
 {
     visited[v] = true;
 
@@ -297,7 +314,7 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent)
 }
 
 
-bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack)
+bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const
 {
     visited[v] = true;
     recStack[v] = true;
@@ -321,7 +338,7 @@ bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector
 }
 
 
-void Graph::isConnectedCheckUtil(std::vector <bool> &visited, bool reverse)
+void Graph::isConnectedCheckUtil(std::vector <bool> &visited, bool reverse) const
 {
     std::queue<int> to_visit;
     to_visit.push(0);

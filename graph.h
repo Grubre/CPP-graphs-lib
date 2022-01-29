@@ -28,15 +28,20 @@ public:
     bool isUndirected() const;
     bool isConnected() const;
 
+    std::vector< std::vector< bool > > getAdjacencyMatrix() const;
+
 //algorithmic getters
-    bool isCyclic();
-    int minEdgeCount(int NodeAID, int NodeBID);
+    bool isCyclic() const;
+    int minEdgeCount(int NodeAID, int NodeBID) const;
+
+    std::vector<int> getNeighbors(int id) const;
 
 //utility functions
 public:
     void traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
-    int startingPointID = 0);
+    int startingPointID = 0) const;
 
+    // for testing purposes only, to be removed
     void printAdjacencyMatrix() const;
 
 //constructors & destructors
@@ -50,10 +55,10 @@ private:
     bool isConnectedCheck(); // algorithm that checks whether the graph is connected
     bool isUndirectedCheck() const; // algorithm that checks whether the graph is undirected
 
-    void isConnectedCheckUtil(std::vector <bool> &visited, bool reverse);
+    void isConnectedCheckUtil(std::vector <bool> &visited, bool reverse) const;
 
-    bool isCyclicUtil(int v, std::vector <bool> &visited, int parent);
-    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack);
+    bool isCyclicUtil(int v, std::vector <bool> &visited, int parent) const;
+    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const;
 
     void update();
 
