@@ -86,7 +86,7 @@ void Graph::remove_vertex(int NodeAID, int NodeBID, bool twoWay)
 }
 
 
-void Graph::empty()
+void Graph::clear()
 {
     m_AdjacencyMatrix.clear();
     m_isConnected = 1;

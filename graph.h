@@ -35,7 +35,7 @@ public:
     void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
     void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
 
-    void empty();
+    void clear();
 
 //variable getters
 public:
