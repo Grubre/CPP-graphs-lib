@@ -66,8 +66,10 @@ private:
 
 //operator overloads
 public:
-// this operator concatenates two graphs
-Graph operator | (Graph const &rhs);
+    //concatenate operator
+    Graph operator | (Graph const &rhs);
+    //equality operator
+    bool operator == (Graph const &rhs);
 
 //variables
 protected:
