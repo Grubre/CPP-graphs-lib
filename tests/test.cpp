@@ -4,12 +4,12 @@
 int main()
 {
     Graph a(3);
-    a.addVertex(0,1);
-    a.addVertex(1,2);
+    a.add_vertex(0,1);
+    a.add_vertex(1,2);
     Graph b = a;
-    a.printAdjacencyMatrix();
+    a.print_adjacency_matrix();
     std::cout << std::endl;
-    b.printAdjacencyMatrix();
+    b.print_adjacency_matrix();
     std::cout << std::endl << (a == b) << std::endl;;
     return 0;
 }

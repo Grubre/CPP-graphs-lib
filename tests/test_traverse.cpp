@@ -4,12 +4,12 @@
 int main()
 {
     Graph a(7);
-    a.addVertex(0,1);
-    a.addVertex(0,2);
-    a.addVertex(1,3);
-    a.addVertex(1,4);
-    a.addVertex(2,5);
-    a.addVertex(2,6);
+    a.add_vertex(0,1);
+    a.add_vertex(0,2);
+    a.add_vertex(1,3);
+    a.add_vertex(1,4);
+    a.add_vertex(2,5);
+    a.add_vertex(2,6);
     auto lambdaPrint = [](int id, std::vector<bool> adjacencyList)
     {
         std::cout << id << " ";

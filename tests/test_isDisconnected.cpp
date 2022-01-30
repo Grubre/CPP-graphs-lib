@@ -4,12 +4,12 @@
 int main()
 {
     Graph a(5);
-    a.addVertex(0,1,false);
-    a.addVertex(2,1,false);
-    a.addVertex(2,3);
-    a.addVertex(3,4);
-    a.printAdjacencyMatrix();
-    std::cout << "undirected: " << a.isUndirected() << std::endl;
-    std::cout << "connected: " << a.isConnected() << std::endl;
+    a.add_vertex(0,1,false);
+    a.add_vertex(2,1,false);
+    a.add_vertex(2,3);
+    a.add_vertex(3,4);
+    a.print_adjacency_matrix();
+    std::cout << "undirected: " << a.is_undirected() << std::endl;
+    std::cout << "connected: " << a.is_connected() << std::endl;
     return 0;
 }

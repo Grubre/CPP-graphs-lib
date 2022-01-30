@@ -1,4 +1,16 @@
-#pragma once
+#ifndef _GRAPH_H
+#define _GRAPH_H
+///////////////////////////////////////////////////////////////////
+// NAME:               graph.h
+//
+// PURPOSE:            Definition of Graph class. This is a simple
+//                     unweighted graph that serves as a base for
+//                     all the other graph classes
+//
+// AUTHOR:             Grubre
+///////////////////////////////////////////////////////////////////
+
+
 #include <vector>
 #include <queue>
 #include <stack>
@@ -15,26 +27,27 @@ public:
         
 //setters
 public:
-    void addNode();
-    void addNode(const std::vector<int> &neighborIDs, bool twoWay = true);
-    void removeNode(int id);
+    void add_node();
+    void add_node(const std::vector<int> &neighborIDs, bool twoWay = true);
+    void remove_node(int id);
 
-    void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
-    void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
+    void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
+    void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
 
 //variable getters
 public:
     unsigned int size() const;
-    bool isUndirected() const;
-    bool isConnected() const;
+    bool is_undirected() const;
+    bool is_connected() const;
 
     std::vector< std::vector< bool > > getAdjacencyMatrix() const;
 
 //algorithmic getters
-    bool isCyclic() const;
-    int minEdgeCount(int NodeAID, int NodeBID) const;
+    bool is_cyclic() const;
+    int min_edge_count(int NodeAID, int NodeBID) const;
+    int num_of_paths();
 
-    std::vector<int> getNeighbors(int id) const;
+    std::vector<int> get_neighbors(int id) const;
 
 //utility functions
 public:
@@ -42,7 +55,7 @@ public:
     int startingPointID = 0) const;
 
     // for testing purposes only, to be removed
-    void printAdjacencyMatrix() const;
+    void print_adjacency_matrix() const;
 
 //constructors & destructors
 public:
@@ -52,17 +65,17 @@ public:
 
 //private utility functions
 private:
-    bool isConnectedCheck(); // algorithm that checks whether the graph is connected
-    bool isUndirectedCheck() const; // algorithm that checks whether the graph is undirected
+    bool P_is_connected_check(); // algorithm that checks whether the graph is connected
+    bool P_is_undirected_check() const; // algorithm that checks whether the graph is undirected
 
-    void isConnectedCheckUtil(std::vector <bool> &visited, bool reverse) const;
+    void P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const;
 
-    bool isCyclicUtil(int v, std::vector <bool> &visited, int parent) const;
-    bool isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const;
+    bool P_is_cyclic_util(int v, std::vector <bool> &visited, int parent) const;
+    bool P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const;
 
-    void update();
+    void P_update();
 
-    bool isWithinBounds(int id);
+    bool P_is_within_bounds(int id);
 
 //operator overloads
 public:
@@ -81,3 +94,4 @@ protected:
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
 };
+#endif //_GRAPH_H

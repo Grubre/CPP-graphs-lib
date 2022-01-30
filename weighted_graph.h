@@ -1,4 +1,16 @@
+#ifndef _WEIGHTED_GRAPH_H
+#define _WEIGHTED_GRAPH_H
+///////////////////////////////////////////////////////////////////
+// NAME:               weighted_graph.h
+//
+// PURPOSE:            Method implementations of Graph class.
+//
+// AUTHOR:             Grubre
+///////////////////////////////////////////////////////////////////
+
+
 #include "graph.h"
+
 
 class Weighted_Graph : public Graph{
 public:
@@ -10,12 +22,12 @@ public:
 
 //setters
 public:
-    void addNode();
-    void addNode(const std::vector<int> &neighborIDs, bool twoWay = true);
-    void removeNode(int id);
+    void add_node();
+    void add_node(const std::vector<int> &neighborIDs, bool twoWay = true);
+    void remove_node(int id);
 
-    void addVertex(int NodeAID, int NodeBID, bool twoWay = true);
-    void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
+    void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
+    void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
 
 //constructors & destructors
 public:
@@ -27,3 +39,5 @@ public:
 protected:
     //bool m_isSymetricallyValued;
 };
+
+#endif //_WEIGHTED_GRAPH_H

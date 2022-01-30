@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////
+// NAME:               weighted_graph.cpp
+//
+// PURPOSE:            Definition of Weighted_Graph class.
+//                     This class is an extention of the Graph class.
+//                     It adds the functionality of having weighted vertices.
+//
+// AUTHOR:             Grubre
+///////////////////////////////////////////////////////////////////
+
 #include "weighted_graph.h"
 #include <iostream>
 

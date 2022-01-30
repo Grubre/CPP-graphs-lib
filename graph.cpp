@@ -1,3 +1,11 @@
+///////////////////////////////////////////////////////////////////
+// NAME:               graph.cpp
+//
+// PURPOSE:            Method implementations of Graph class.
+//
+// AUTHOR:             Grubre
+///////////////////////////////////////////////////////////////////
+
 #include "graph.h"
 #include <iostream>
 
@@ -169,6 +177,7 @@ std::vector<int> Graph::getNeighbors(int id) const
     }
     return neighborList;
 }
+
 
 //==================utility====================
 void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
@@ -405,6 +414,7 @@ bool Graph::operator == (Graph const &rhs)
 {
     return this->m_AdjacencyMatrix == rhs.m_AdjacencyMatrix;
 }
+
 
 //==================contructors & destructors====================
 Graph::Graph() : m_size(0)

@@ -4,11 +4,11 @@
 int main()
 {
     Graph a(3);
-    a.addVertex(0,1);
-    a.addVertex(1,2);
-    //a.addVertex(0,2);
-    a.printAdjacencyMatrix();
-    std::cout << "Undirected: " << a.isUndirected() << std::endl;
-    std::cout << "isCyclic:   " << a.isCyclic() << std::endl;
+    a.add_vertex(0,1);
+    a.add_vertex(1,2);
+    //a.add_vertex(0,2);
+    a.print_adjacency_matrix();
+    std::cout << "Undirected: " << a.is_undirected() << std::endl;
+    std::cout << "is_cyclic:   " << a.is_cyclic() << std::endl;
     return 0;
 }

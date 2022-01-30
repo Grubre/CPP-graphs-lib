@@ -1,4 +1,13 @@
 #pragma once
+///////////////////////////////////////////////////////////////////
+// NAME:               val_graph.h
+//
+// PURPOSE:            TO DO
+//
+// AUTHOR:             Grubre
+///////////////////////////////////////////////////////////////////
+
+
 #include "graph.h"
 #include <iostream>
 
@@ -14,12 +23,12 @@ enum class TraverseAlgorithm
 };
 //setters
 public:
-    void addNode();
-    void removeNode(int id);
+    void add_node();
+    void remove_node(int id);
     void setNodeValue(int id, T_node value);
 
-    void addVertex(int NodeAID, int NodeBID, T_vertex value, bool twoWay = true);
-    void removeVertex(int NodeAID, int NodeBID, bool twoWay = true);
+    void add_vertex(int NodeAID, int NodeBID, T_vertex value, bool twoWay = true);
+    void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
     void setVertexValue(int NodeAID, int NodeBID, T_node value, bool twoWay = true);
 
 //getters
@@ -49,20 +58,20 @@ protected:
 
 //==================setters====================
 template <class T_node, class T_vertex>
-void Val_Graph<T_node, T_vertex>::addNode()
+void Val_Graph<T_node, T_vertex>::add_node()
 {
-    Graph::addNode();
+    Graph::add_node();
     m_NodeValues.resize(m_size);
     m_VertexValues.resize(m_size);
 }
 
 
 template <class T_node, class T_vertex>
-void Val_Graph<T_node, T_vertex>::removeNode(int id)
+void Val_Graph<T_node, T_vertex>::remove_node(int id)
 {
     if(id > m_size - 1)
         return;
-    Graph::removeNode(id);
+    Graph::remove_node(id);
     m_NodeValues.erase(m_AdjacencyMatrix.begin()+id);
     m_VertexValues.erase(m_AdjacencyMatrix.begin()+id);
     for(int i = 0; i < m_size; i++)
@@ -80,9 +89,9 @@ void Val_Graph<T_node, T_vertex>::setNodeValue(int id, T_node value)
 
 
 template <class T_node, class T_vertex>
-void Val_Graph<T_node, T_vertex>::addVertex(int NodeAID, int NodeBID, T_vertex value, bool twoWay)
+void Val_Graph<T_node, T_vertex>::add_vertex(int NodeAID, int NodeBID, T_vertex value, bool twoWay)
 {
-    Graph::addVertex(NodeAID, NodeBID, twoWay);
+    Graph::add_vertex(NodeAID, NodeBID, twoWay);
     m_VertexValues[NodeAID][NodeBID] = value;
     if(twoWay)
         m_VertexValues[NodeBID][NodeAID] = value;
@@ -90,9 +99,9 @@ void Val_Graph<T_node, T_vertex>::addVertex(int NodeAID, int NodeBID, T_vertex v
 
 
 template <class T_node, class T_vertex>
-void Val_Graph<T_node, T_vertex>::removeVertex(int NodeAID, int NodeBID, bool twoWay)
+void Val_Graph<T_node, T_vertex>::remove_vertex(int NodeAID, int NodeBID, bool twoWay)
 {
-    Graph::removeVertex(NodeAID, NodeBID, twoWay);
+    Graph::remove_vertex(NodeAID, NodeBID, twoWay);
     // to check
 }
 
