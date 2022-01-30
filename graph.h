@@ -64,6 +64,11 @@ private:
 
     bool isWithinBounds(int id);
 
+//operator overloads
+public:
+// this operator concatenates two graphs
+Graph operator | (Graph const &rhs);
+
 //variables
 protected:
     unsigned int m_size;

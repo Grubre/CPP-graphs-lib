@@ -1,6 +1,8 @@
 #include "graph.h"
 #include <iostream>
 
+#define MIN(x,y) x > y ? y : x
+
 
 //==================setters====================
 void Graph::addNode()
@@ -370,6 +372,32 @@ void Graph::update()
 bool Graph::isWithinBounds(int id)
 {
     return (id >= 0 && id < m_size);
+}
+
+
+//==================operator overloads====================
+Graph Graph::operator | (Graph const &rhs)
+{
+    Graph lhs;
+    lhs.m_AdjacencyMatrix = this->m_AdjacencyMatrix;
+    lhs.m_size = this->m_size;
+    for(int i = 0; i < lhs.size(); i++)
+    {
+        for(int j = 0; j < rhs.m_size; j++)
+        {
+            lhs.m_AdjacencyMatrix[i].push_back(false);
+        }
+    }
+    std::vector<bool> prefix(lhs.m_size, false);
+    for(int j = 0; j < rhs.m_size; j++)
+    {
+        std::vector<bool> row(prefix);
+        row.insert(row.end(), rhs.m_AdjacencyMatrix[j].begin(), rhs.m_AdjacencyMatrix[j].end());
+        lhs.m_AdjacencyMatrix.push_back(row);
+    }
+    lhs.m_size = lhs.m_size + rhs.m_size;
+    lhs.update();
+    return lhs;
 }
 
 //==================contructors & destructors====================
