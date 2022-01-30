@@ -11,7 +11,8 @@
 
 #include "graph.h"
 
-
+namespace Grubre
+{
 class Weighted_Graph : public Graph{
 public:
     enum class TraverseAlgorithm
@@ -39,5 +40,5 @@ public:
 protected:
     //bool m_isSymetricallyValued;
 };
-
+};
 #endif //_WEIGHTED_GRAPH_H

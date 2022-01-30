@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _VAL_GRAPH_H
+#define _VAL_GRAPH_H
 ///////////////////////////////////////////////////////////////////
 // NAME:               val_graph.h
 //
@@ -11,7 +12,8 @@
 #include "graph.h"
 #include <iostream>
 
-
+namespace Grubre
+{
 template <class T_node, class T_vertex>
 class Val_Graph : public Graph
 {
@@ -138,3 +140,5 @@ Val_Graph<T_node, T_vertex>::~Val_Graph()
 {
 
 }
+};
+#endif

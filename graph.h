@@ -16,7 +16,8 @@
 #include <stack>
 #include <functional>
 
-
+namespace Grubre
+{
 class Graph{
 public:
     enum class TraverseAlgorithm
@@ -34,6 +35,8 @@ public:
     void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
     void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
 
+    void empty();
+
 //variable getters
 public:
     unsigned int size() const;
@@ -45,7 +48,7 @@ public:
 //algorithmic getters
     bool is_cyclic() const;
     int min_edge_count(int NodeAID, int NodeBID) const;
-    int num_of_paths();
+    int num_of_paths(int id, int of_length = 1) const;// TO DO
 
     std::vector<int> get_neighbors(int id) const;
 
@@ -93,5 +96,6 @@ protected:
     bool m_isWeighted;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
+};
 };
 #endif //_GRAPH_H

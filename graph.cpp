@@ -12,8 +12,10 @@
 #define MIN(x,y) x > y ? y : x
 
 
+using namespace Grubre;
+
 //==================setters====================
-void Graph::addNode()
+void Graph::add_node()
 {
     for(int i = 0; i < m_size; i++)
     {
@@ -28,7 +30,7 @@ void Graph::addNode()
 }
 
 
-void Graph::addNode(const std::vector<int> &neighborIDs, bool twoWay)
+void Graph::add_node(const std::vector<int> &neighborIDs, bool twoWay)
 {
     std::vector<bool> neighborVector(m_size+1,0);
     for(auto i : neighborIDs)
@@ -42,11 +44,11 @@ void Graph::addNode(const std::vector<int> &neighborIDs, bool twoWay)
 
     // after adding a new node with init list we check whether the graph is disconnected
     // and/or directed
-    update();
+    P_update();
 }
 
 
-void Graph::removeNode(int id)
+void Graph::remove_node(int id)
 {
     if(id > m_size - 1)
         return;
@@ -58,29 +60,38 @@ void Graph::removeNode(int id)
     }
 
     // after removing a node we check whether the graph is directed and/or disconnected 
-    update();
+    P_update();
 }
 
 
-void Graph::addVertex(int NodeAID, int NodeBID, bool twoWay)
+void Graph::add_vertex(int NodeAID, int NodeBID, bool twoWay)
 {
     m_AdjacencyMatrix[NodeAID][NodeBID] = true;
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = true;
 
     // after adding a new vertex we check whether the graph is directed or/and disconnected
-    update();
+    P_update();
 }
 
 
-void Graph::removeVertex(int NodeAID, int NodeBID, bool twoWay)
+void Graph::remove_vertex(int NodeAID, int NodeBID, bool twoWay)
 {
     m_AdjacencyMatrix[NodeAID][NodeBID] = false;
     if(twoWay)
         m_AdjacencyMatrix[NodeBID][NodeAID] = false;
 
     // after removing a vertex we check whether the graph is directed or/and disconnected
-    update();
+    P_update();
+}
+
+
+void Graph::empty()
+{
+    m_AdjacencyMatrix.clear();
+    m_isConnected = 1;
+    m_isUndirected = 1;
+    m_size = 0;
 }
 
 
@@ -89,11 +100,11 @@ unsigned int Graph::size() const
 {
     return m_size;
 }
-bool Graph::isUndirected() const
+bool Graph::is_undirected() const
 {
     return m_isUndirected;
 }
-bool Graph::isConnected() const
+bool Graph::is_connected() const
 {
     return m_isConnected;
 }
@@ -104,17 +115,17 @@ std::vector< std::vector< bool > > Graph::getAdjacencyMatrix() const
 
 
 //==================variable getters====================
-bool Graph::isCyclic() const
+bool Graph::is_cyclic() const
 {
     std::vector<bool> visited(m_size,0);
     if(m_isUndirected)
     {
-        //std::cout << "isCyclic Undirected" << std::endl;
+        //std::cout << "is_cyclic Undirected" << std::endl;
         for(int u = 0; u < m_size; u++)
         {
             if(!visited[u])
             {
-                if(isCyclicUtil(u,visited,-1))
+                if(P_is_cyclic_util(u,visited,-1))
                     return true;
             }
         }
@@ -126,7 +137,7 @@ bool Graph::isCyclic() const
         {
             if(!visited[u])
             {
-                if(isCyclicUtilDirected(u,visited, recStack))
+                if(P_is_cyclic_util_directed(u,visited, recStack))
                     return true;
             }
         }
@@ -135,7 +146,7 @@ bool Graph::isCyclic() const
 }
 
 
-int Graph::minEdgeCount(int NodeAID, int NodeBID) const
+int Graph::min_edge_count(int NodeAID, int NodeBID) const
 {
     std::vector<bool> visited(m_size, false);
     std::vector<int> distance(m_size, -1);
@@ -165,7 +176,7 @@ int Graph::minEdgeCount(int NodeAID, int NodeBID) const
 }
 
 
-std::vector<int> Graph::getNeighbors(int id) const
+std::vector<int> Graph::get_neighbors(int id) const
 {
     std::vector<int> neighborList;
     for(int i = 0; i < m_size; i++)
@@ -176,6 +187,14 @@ std::vector<int> Graph::getNeighbors(int id) const
         }
     }
     return neighborList;
+}
+
+
+int Graph::num_of_paths(int id, int of_length = 1) const
+{
+    // to do
+    int number = 0;
+    return number;
 }
 
 
@@ -241,7 +260,7 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
 }
 
 
-void Graph::printAdjacencyMatrix() const
+void Graph::print_adjacency_matrix() const
 {
     for(int i = 0; i < m_size; i++)
     {
@@ -255,7 +274,7 @@ void Graph::printAdjacencyMatrix() const
 
 
 //==================private utility functions====================
-bool Graph::isUndirectedCheck() const
+bool Graph::P_is_undirected_check() const
 {
     for(int i = 0; i < m_size; i++)
     {
@@ -269,12 +288,12 @@ bool Graph::isUndirectedCheck() const
 }
 
 
-bool Graph::isConnectedCheck()
+bool Graph::P_is_connected_check()
 {
     if(m_isUndirected)
     {
         std::vector<bool> visited(m_size,false);
-        isConnectedCheckUtil(visited,false);
+        P_is_connected_check_util(visited,false);
         
         for(int i = 0; i < m_size; i++)
             if(!visited[i])
@@ -287,8 +306,8 @@ bool Graph::isConnectedCheck()
     {
         std::vector<bool> visited1(m_size,false);
         std::vector<bool> visited2(m_size,false);
-        isConnectedCheckUtil(visited1, false);
-        isConnectedCheckUtil(visited2, true);
+        P_is_connected_check_util(visited1, false);
+        P_is_connected_check_util(visited2, true);
 
         for(int i = 0; i < m_size; i++)
             if(!visited1[i] && !visited2[i])
@@ -302,7 +321,7 @@ bool Graph::isConnectedCheck()
 }
 
 
-bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent) const
+bool Graph::P_is_cyclic_util(int v, std::vector <bool> &visited, int parent) const
 {
     visited[v] = true;
 
@@ -312,7 +331,7 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent) const
         {
             if(!visited[i])
             {
-                if(isCyclicUtil(i, visited, v))
+                if(P_is_cyclic_util(i, visited, v))
                 {
                     return true;
                 }     
@@ -325,7 +344,7 @@ bool Graph::isCyclicUtil(int v, std::vector <bool> &visited, int parent) const
 }
 
 
-bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const
+bool Graph::P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const
 {
     visited[v] = true;
     recStack[v] = true;
@@ -335,7 +354,7 @@ bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector
         {
             if(!visited[i])
             {
-                if(isCyclicUtilDirected(i, visited, recStack))
+                if(P_is_cyclic_util_directed(i, visited, recStack))
                 {
                     return true;
                 }
@@ -349,7 +368,7 @@ bool Graph::isCyclicUtilDirected(int v, std::vector <bool> &visited, std::vector
 }
 
 
-void Graph::isConnectedCheckUtil(std::vector <bool> &visited, bool reverse) const
+void Graph::P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const
 {
     std::queue<int> to_visit;
     to_visit.push(0);
@@ -371,14 +390,14 @@ void Graph::isConnectedCheckUtil(std::vector <bool> &visited, bool reverse) cons
 }
 
 
-void Graph::update()
+void Graph::P_update()
 {
-    m_isUndirected = isUndirectedCheck();
-    m_isConnected = isConnectedCheck();
+    m_isUndirected = P_is_undirected_check();
+    m_isConnected = P_is_connected_check();
 }
 
 
-bool Graph::isWithinBounds(int id)
+bool Graph::P_is_within_bounds(int id)
 {
     return (id >= 0 && id < m_size);
 }
@@ -405,7 +424,7 @@ Graph Graph::operator | (Graph const &rhs)
         lhs.m_AdjacencyMatrix.push_back(row);
     }
     lhs.m_size = lhs.m_size + rhs.m_size;
-    lhs.update();
+    lhs.P_update();
     return lhs;
 }
 

@@ -11,7 +11,7 @@
 #include "weighted_graph.h"
 #include <iostream>
 
-
+using namespace Grubre;
 //==================contructors & destructors====================
 Weighted_Graph::Weighted_Graph() : Graph()
 {
