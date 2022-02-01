@@ -53,8 +53,6 @@ public:
 
 //variables
 protected:
-    //bool m_isSymetricallyValued;
-
     std::vector<std::vector<T_vertex>> m_VertexValues;
     std::vector<T_node> m_NodeValues;
 };
@@ -123,7 +121,18 @@ void Weighted_Graph<T_node,T_vertex>::add(const Vertex &id, T_vertex value, bool
 template <class T_node, class T_vertex>
 void Weighted_Graph<T_node,T_vertex>::remove(const Vertex &id, bool twoWay)
 {
+    Graph::remove(id, twoWay);
+    m_VertexValues[id.first][id.second] = T_vertex();
+    m_VertexValues[id.second][id.first] = T_vertex();
+}
 
+
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::clear()
+{
+    Graph::clear();
+    m_VertexValues.clear();
+    m_NodeValues.clear();
 }
 
 
@@ -160,6 +169,8 @@ T_node& Weighted_Graph<T_node,T_vertex>::operator[](int id)
 template <class T_node, class T_vertex>
 T_vertex& Weighted_Graph<T_node,T_vertex>::operator[](Vertex id)
 {
+    if(!m_AdjacencyMatrix[id.first][id.second])
+        add(id,T_vertex(),false);
     return m_VertexValues[id.first][id.second];
 }
 

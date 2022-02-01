@@ -103,7 +103,6 @@ protected:
 
     bool m_isUndirected;
     bool m_isConnected;
-    bool m_isWeighted;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
 };
