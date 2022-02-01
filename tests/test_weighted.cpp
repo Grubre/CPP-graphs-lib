@@ -1,7 +1,7 @@
-#include "../weighted_graph.h"
+#include "../src/weighted_graph.h"
 #include <iostream>
 
-using namespace std;
+using namespace Grubre;;
 
 int main()
 {

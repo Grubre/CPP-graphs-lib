@@ -1,5 +1,7 @@
 #include <iostream>
-#include "../graph.h"
+#include "../src/graph.h"
+
+using namespace Grubre;
 
 int main()
 {

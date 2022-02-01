@@ -3,7 +3,10 @@
 ///////////////////////////////////////////////////////////////////
 // NAME:               weighted_graph.h
 //
-// PURPOSE:            Method implementations of Graph class.
+// PURPOSE:            Implementation of Weighted_Graph class.
+//                     It's an extension of the Graph class, that
+//                     holds values for vertices and performs basic
+//                     graph algorithms.
 //
 // AUTHOR:             Grubre
 ///////////////////////////////////////////////////////////////////
@@ -39,6 +42,25 @@ public:
 //variables
 protected:
     //bool m_isSymetricallyValued;
+
+    std::vector<std::vector<float>> m_VertexValues;
 };
+
+
+//==================contructors & destructors====================
+Weighted_Graph::Weighted_Graph() : Graph()
+{
+    
+}
+
+Weighted_Graph::Weighted_Graph(unsigned int _size) : Graph(_size)
+{
+    m_VertexValues.resize(m_size, std::vector<float>(m_size));
+}
+
+Weighted_Graph::~Weighted_Graph()
+{
+
+}
 };
 #endif //_WEIGHTED_GRAPH_H
