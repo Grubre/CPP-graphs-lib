@@ -16,6 +16,7 @@
 
 namespace Grubre
 {
+template <class T_node, class T_vertex>    
 class Weighted_Graph : public Graph{
 public:
     enum class TraverseAlgorithm
@@ -26,12 +27,23 @@ public:
 
 //setters
 public:
-    void add_node();
-    void add_node(const std::vector<int> &neighborIDs, bool twoWay = true);
-    void remove_node(int id);
+    //nodes
+    void add(T_node value = T_node());
+    void remove(int id);
 
-    void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
-    void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
+    //vertices
+    void add(const Vertex &id, T_vertex value = T_vertex(), bool twoWay = true);
+    void remove(const Vertex &id, bool twoWay = true);
+
+    void clear();
+
+//utility functions
+    void print_node_values();
+    void print_vertex_values();
+
+//operator overloads
+    T_node& operator[](int);
+    T_vertex& operator[](Vertex);
 
 //constructors & destructors
 public:
@@ -43,24 +55,114 @@ public:
 protected:
     //bool m_isSymetricallyValued;
 
-    std::vector<std::vector<float>> m_VertexValues;
+    std::vector<std::vector<T_vertex>> m_VertexValues;
+    std::vector<T_node> m_NodeValues;
 };
 
 
 //==================contructors & destructors====================
-Weighted_Graph::Weighted_Graph() : Graph()
+template <class T_node, class T_vertex>
+Weighted_Graph<T_node,T_vertex>::Weighted_Graph() : Graph()
 {
     
 }
 
-Weighted_Graph::Weighted_Graph(unsigned int _size) : Graph(_size)
+template <class T_node, class T_vertex>
+Weighted_Graph<T_node,T_vertex>::Weighted_Graph(unsigned int _size) : Graph(_size)
 {
-    m_VertexValues.resize(m_size, std::vector<float>(m_size));
+    m_VertexValues.resize(m_size, std::vector<T_vertex>(m_size));
+    m_NodeValues.resize(m_size, T_node());
 }
 
-Weighted_Graph::~Weighted_Graph()
+template <class T_node, class T_vertex>
+Weighted_Graph<T_node,T_vertex>::~Weighted_Graph()
 {
 
 }
+
+
+//==================setters====================
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::add(T_node value)
+{
+    Graph::add();
+
+    for(int i = 0; i < m_size - 1; i++)
+    {
+        m_VertexValues[i].push_back(T_vertex());
+    }
+    m_VertexValues.push_back(std::vector<T_vertex>(m_size));
+    m_NodeValues.push_back(value);
+}
+
+
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::remove(int id)
+{
+    Graph::remove(id);
+
+    m_NodeValues.erase(m_NodeValues.begin()+id);
+    m_VertexValues.erase(m_VertexValues.begin()+id);
+    for(int i = 0; i < m_size; i++)
+    {
+        m_VertexValues[i].erase(m_VertexValues[i].begin()+id);
+    }
+}
+
+
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::add(const Vertex &id, T_vertex value, bool twoWay)
+{
+    Graph::add(id,twoWay);
+    m_VertexValues[id.first][id.second] = value;
+    if(twoWay)
+        m_VertexValues[id.second][id.first] = value;
+}
+
+
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::remove(const Vertex &id, bool twoWay)
+{
+
+}
+
+
+//==================utility functions====================
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::print_node_values()
+{
+    for(int i = 0; i < m_size; i++)
+    {
+        std::cout << m_NodeValues[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+
+template <class T_node, class T_vertex>
+void Weighted_Graph<T_node,T_vertex>::print_vertex_values()
+{
+    for(int i = 0; i < m_size; i++)
+    {
+        for(int j = 0; j < m_size; j++)
+            std::cout << m_VertexValues[i][j] << " ";
+        std::cout << std::endl;
+    }
+}
+
+
+//==================operator overloads====================
+template <class T_node, class T_vertex>
+T_node& Weighted_Graph<T_node,T_vertex>::operator[](int id)
+{
+    return m_NodeValues[id];
+}
+template <class T_node, class T_vertex>
+T_vertex& Weighted_Graph<T_node,T_vertex>::operator[](Vertex id)
+{
+    return m_VertexValues[id.first][id.second];
+}
+
+
 };
 #endif //_WEIGHTED_GRAPH_H

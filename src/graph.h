@@ -15,10 +15,19 @@
 #include <queue>
 #include <stack>
 #include <functional>
+#include <utility>
 
 namespace Grubre
 {
+
 class Graph{
+protected:
+    struct Vertex{
+    int first, second;
+    Vertex(int _f, int _s) : first(_f), second(_s)
+    {}
+    Vertex reverse(){return Vertex(second,first);}
+    };
 public:
     enum class TraverseAlgorithm
     {
@@ -28,12 +37,13 @@ public:
         
 //setters
 public:
-    void add_node();
-    void add_node(const std::vector<int> &neighborIDs, bool twoWay = true);
-    void remove_node(int id);
+    //nodes
+    void add();
+    void remove(int id);
 
-    void add_vertex(int NodeAID, int NodeBID, bool twoWay = true);
-    void remove_vertex(int NodeAID, int NodeBID, bool twoWay = true);
+    //vertices
+    void add(const Vertex &id, bool twoWay = true);
+    void remove(const Vertex &id, bool twoWay = true);
 
     void clear();
 
@@ -47,7 +57,7 @@ public:
 
 //algorithmic getters
     bool is_cyclic() const;
-    int min_edge_count(int NodeAID, int NodeBID) const;
+    int min_edge_count(const std::pair<int,int> &id) const;
     int num_of_paths(int id, int of_length = 1) const;// TO DO
 
     std::vector<int> get_neighbors(int id) const;
@@ -100,7 +110,7 @@ protected:
 
 
 //==================setters====================
-void Graph::add_node()
+void Graph::add()
 {
     for(int i = 0; i < m_size; i++)
     {
@@ -115,28 +125,8 @@ void Graph::add_node()
 }
 
 
-void Graph::add_node(const std::vector<int> &neighborIDs, bool twoWay)
+void Graph::remove(int id)
 {
-    std::vector<bool> neighborVector(m_size+1,0);
-    for(auto i : neighborIDs)
-        neighborVector[i] = true;
-    for(int i = 0; i < m_size; i++)
-    {
-        m_AdjacencyMatrix[i].push_back(twoWay && neighborVector[i]);
-    }
-    m_size++;
-    m_AdjacencyMatrix.push_back(neighborVector);
-
-    // after adding a new node with init list we check whether the graph is disconnected
-    // and/or directed
-    P_update();
-}
-
-
-void Graph::remove_node(int id)
-{
-    if(id > m_size - 1)
-        return;
     m_size--;
     m_AdjacencyMatrix.erase(m_AdjacencyMatrix.begin()+id);
     for(int i = 0; i < m_size; i++)
@@ -149,22 +139,22 @@ void Graph::remove_node(int id)
 }
 
 
-void Graph::add_vertex(int NodeAID, int NodeBID, bool twoWay)
+void Graph::add(const Vertex &id, bool twoWay)
 {
-    m_AdjacencyMatrix[NodeAID][NodeBID] = true;
+    m_AdjacencyMatrix[id.first][id.second] = true;
     if(twoWay)
-        m_AdjacencyMatrix[NodeBID][NodeAID] = true;
+        m_AdjacencyMatrix[id.first][id.second] = true;
 
     // after adding a new vertex we check whether the graph is directed or/and disconnected
     P_update();
 }
 
 
-void Graph::remove_vertex(int NodeAID, int NodeBID, bool twoWay)
+void Graph::remove(const Vertex &id, bool twoWay)
 {
-    m_AdjacencyMatrix[NodeAID][NodeBID] = false;
+    m_AdjacencyMatrix[id.first][id.second] = false;
     if(twoWay)
-        m_AdjacencyMatrix[NodeBID][NodeAID] = false;
+        m_AdjacencyMatrix[id.first][id.second] = false;
 
     // after removing a vertex we check whether the graph is directed or/and disconnected
     P_update();
@@ -231,16 +221,16 @@ bool Graph::is_cyclic() const
 }
 
 
-int Graph::min_edge_count(int NodeAID, int NodeBID) const
+int Graph::min_edge_count(const std::pair<int,int> &id) const
 {
     std::vector<bool> visited(m_size, false);
     std::vector<int> distance(m_size, -1);
     
     std::queue <int> to_visit;
-    distance[NodeAID] = 0;
+    distance[id.first] = 0;
 
-    to_visit.push(NodeAID);
-    visited[NodeAID] = true;
+    to_visit.push(id.first);
+    visited[id.first] = true;
 
     while (!to_visit.empty())
     {
@@ -257,7 +247,7 @@ int Graph::min_edge_count(int NodeAID, int NodeBID) const
             visited[i] = true;
         }
     }
-    return distance[NodeBID];
+    return distance[id.second];
 }
 
 
