@@ -3,17 +3,20 @@
 
 using namespace Grubre;
 
+void print_matrix()
+{
+    
+}
+
 int main()
 {
-    Weighted_Graph<std::string,int> a(3);
-    a[0] = "Konin";
-    a[1] = "Kalisz";
-    a[2] = "Poznan";
-    a.add("Wroclaw");
-    a.add({0,1},5);
-    a[{0,1}] = 3;
-    a.print_adjacency_matrix();
-    a.print_node_values();
-    a.print_vertex_values();
+    Graph a(4);
+    a.add({0,1});
+    a.add({1,2});
+    a.add({2,3});
+    a.add({0,3});
+
+    std::vector < std::vector<int>> b = a.num_of_paths(0,0,2);
+    std:
     return 0;
 }

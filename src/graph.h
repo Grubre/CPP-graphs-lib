@@ -23,10 +23,9 @@ namespace Grubre
 class Graph{
 protected:
     struct Vertex{
-    int first, second;
-    Vertex(int _f, int _s) : first(_f), second(_s)
-    {}
-    Vertex reverse(){return Vertex(second,first);}
+        int first, second;
+        Vertex(int _f, int _s) : first(_f), second(_s) {}
+        Vertex reverse(){return Vertex(second,first);}
     };
 public:
     enum class TraverseAlgorithm
@@ -58,7 +57,7 @@ public:
 //algorithmic getters
     bool is_cyclic() const;
     int min_edge_count(const std::pair<int,int> &id) const;
-    int num_of_paths(int id, int of_length = 1) const;// TO DO
+    std::vector<std::vector<int>> num_of_paths(int id1, int id2, int of_length = 1);// TO DO
 
     std::vector<int> get_neighbors(int id) const;
 
@@ -78,6 +77,8 @@ public:
 
 //private utility functions
 private:
+    std::vector<std::vector<int>> multiply_matrix(const std::vector<std::vector<int>> &a, const std::vector<std::vector<int>> &b);
+
     bool P_is_connected_check(); // algorithm that checks whether the graph is connected
     bool P_is_undirected_check() const; // algorithm that checks whether the graph is undirected
 
@@ -264,11 +265,29 @@ std::vector<int> Graph::get_neighbors(int id) const
 }
 
 
-int Graph::num_of_paths(int id, int of_length) const
+std::vector<std::vector<int>> Graph::num_of_paths(int id1, int id2, int of_length)
 {
     // to do
-    int number = 0;
-    return number;
+    std::vector<std::vector<int>> ret;
+    ret.resize(m_size,std::vector<int>(m_size,0));
+    for(int i = 0; i < m_size; i++)
+        ret[i][i] = 1;
+
+    std::vector<std::vector<int>> a;
+    a.resize(m_size,std::vector<int>(m_size));
+    for(int i = 0; i < m_size; i++)
+        for(int j = 0; j < m_size; j++)
+            a[i][j] = m_AdjacencyMatrix[i][j];
+
+    while(of_length > 0)
+    {
+        if(of_length % 2 == 1)
+            ret = multiply_matrix(ret, a);
+        a = multiply_matrix(a,a);
+        of_length /= 2;
+    }
+
+    return ret;
 }
 
 
@@ -348,6 +367,30 @@ void Graph::print_adjacency_matrix() const
 
 
 //==================private utility functions====================
+std::vector<std::vector<int>> Graph::multiply_matrix(const std::vector<std::vector<int>> &a, const std::vector<std::vector<int>> &b) 
+{
+    int s = a.size();
+
+    std::vector<std::vector<int>> ret;
+    ret.resize(s,std::vector<int>(s));
+    
+    for(int i = 0; i < s; i++)
+    {
+        for(int j = 0; j < s; j++)
+        {
+            int val = 0;
+            for(int y = 0; y < s; y++)
+            {
+                val += a[i][y] * b[y][j];
+            }
+            ret[i][j] = val;
+        }
+    }
+
+    return ret;
+}
+
+
 bool Graph::P_is_undirected_check() const
 {
     for(int i = 0; i < m_size; i++)
