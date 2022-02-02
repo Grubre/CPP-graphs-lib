@@ -57,7 +57,7 @@ public:
 //algorithmic getters
     bool is_cyclic() const;
     int min_edge_count(const std::pair<int,int> &id) const;
-    std::vector<std::vector<int>> num_of_paths(int id1, int id2, int of_length = 1);// TO DO
+    int num_of_paths(int id1, int id2, int of_length = 1);// TO DO
 
     std::vector<int> get_neighbors(int id) const;
 
@@ -143,7 +143,7 @@ void Graph::add(const Vertex &id, bool twoWay)
 {
     m_AdjacencyMatrix[id.first][id.second] = true;
     if(twoWay)
-        m_AdjacencyMatrix[id.first][id.second] = true;
+        m_AdjacencyMatrix[id.second][id.first] = true;
 
     // after adding a new vertex we check whether the graph is directed or/and disconnected
     P_update();
@@ -265,7 +265,7 @@ std::vector<int> Graph::get_neighbors(int id) const
 }
 
 
-std::vector<std::vector<int>> Graph::num_of_paths(int id1, int id2, int of_length)
+int Graph::num_of_paths(int id1, int id2, int of_length)
 {
     // to do
     std::vector<std::vector<int>> ret;
@@ -287,7 +287,7 @@ std::vector<std::vector<int>> Graph::num_of_paths(int id1, int id2, int of_lengt
         of_length /= 2;
     }
 
-    return ret;
+    return ret[id1][id2];
 }
 
 

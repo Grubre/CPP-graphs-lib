@@ -3,9 +3,15 @@
 
 using namespace Grubre;
 
-void print_matrix()
+void print_matrix(const std::vector < std::vector<int>> &a)
 {
-    
+    for(int i = 0; i < a.size(); i++)
+    {
+        for(int j = 0; j < a.size(); j++)
+            std::cout << a[i][j] << " ";
+        std::cout << std::endl;
+    }
+        
 }
 
 int main()
@@ -16,7 +22,6 @@ int main()
     a.add({2,3});
     a.add({0,3});
 
-    std::vector < std::vector<int>> b = a.num_of_paths(0,0,2);
-    std:
+    std::cout << a.num_of_paths(0,0,2) << std::endl;
     return 0;
 }
