@@ -22,6 +22,7 @@ int main()
     a.add({2,3});
     a.add({0,3});
 
+    std::cout << "Number of paths:\n";
     std::cout << a.num_of_paths(0,0,2) << std::endl;
     return 0;
 }
