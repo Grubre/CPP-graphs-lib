@@ -1,11 +1,11 @@
 #include <iostream>
-#include "../src/graph.h"
+#include "../src/graph.hpp"
 
 using namespace Grubre;
 
 int main()
 {
-    Graph a(3);
+    Graph<int,int> a(3);
     a.add({0,1});
     a.add({1,2});
 

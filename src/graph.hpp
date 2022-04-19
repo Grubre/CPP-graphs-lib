@@ -1,10 +1,14 @@
 #pragma once
 ///////////////////////////////////////////////////////////////////
-// NAME:               graph.h
+// NAME:               graph.hpp
 //
-// PURPOSE:            Implementation of Graph class. This is a simple
-//                     unweighted graph that serves as a base for
-//                     all the other graph classes
+// PURPOSE:            Declaration and Implementation of the Graph class.
+//                     It's a graph model that includes template values
+//                     for nodes and vertices, traversal algortihms(DFS, BFS)
+//                     and functionality such as finding the shortest path,
+//                     counting the number of paths between two nodes and
+//                     keeping track of whether the graph is cyclic, directed
+//                     or connected.
 //
 // AUTHOR:             Grubre
 ///////////////////////////////////////////////////////////////////
@@ -16,9 +20,8 @@
 #include <functional>
 #include <utility>
 
-namespace Grubre
-{
-
+namespace Grubre{
+template <class T_node, class T_vertex>  
 class Graph{
 protected:
     struct Vertex{
@@ -32,18 +35,18 @@ public:
         DFS,
         BFS
     };
-        
+
 //setters
 public:
     //nodes
-    void add();
+    void add(const T_node& value = T_node());
     void remove(int id);
 
     //vertices
-    void add(const Vertex &id, bool twoWay = true);
+    void add(const Vertex &id, const T_vertex& value = T_vertex(), bool twoWay = true);
     void remove(const Vertex &id, bool twoWay = true);
 
-    void clear();
+    void clear(); 
 
 //variable getters
 public:
@@ -62,11 +65,14 @@ public:
 
 //utility functions
 public:
-    void traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
+    void traverse(TraverseAlgorithm alg, std::function<void(int, T_node, std::vector<bool>)> func,
     int startingPointID = 0) const;
 
     // for testing purposes only, to be removed
     void print_adjacency_matrix() const;
+
+    void print_node_values();
+    void print_vertex_values();
 
 //constructors & destructors
 public:
@@ -78,8 +84,8 @@ public:
 private:
     std::vector<std::vector<int>> multiply_matrix(const std::vector<std::vector<int>> &a, const std::vector<std::vector<int>> &b);
 
-    bool P_is_connected_check(); // algorithm that checks whether the graph is connected
-    bool P_is_undirected_check() const; // algorithm that checks whether the graph is undirected
+    bool P_is_connected_check(); // algorithm that checks whether the Graph is connected
+    bool P_is_undirected_check() const; // algorithm that checks whether the Graph is undirected
 
     void P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const;
 
@@ -97,6 +103,9 @@ public:
     //equality operator
     bool operator == (Graph const &rhs);
 
+    T_node& operator[](int);
+    T_vertex& operator[](Vertex);
+
 //variables
 protected:
     unsigned int m_size;
@@ -105,11 +114,15 @@ protected:
     bool m_isConnected;
 
     std::vector< std::vector< bool > > m_AdjacencyMatrix;
+
+    std::vector<std::vector<T_vertex>> m_VertexValues;
+    std::vector<T_node> m_NodeValues;
+
 };
 
-
 //==================setters====================
-void Graph::add()
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::add(const T_node& value)
 {
     for(unsigned int i = 0; i < m_size; i++)
     {
@@ -118,13 +131,20 @@ void Graph::add()
     m_size++;
     m_AdjacencyMatrix.push_back(std::vector<bool>(m_size, false));
 
-    // after adding a new node the graph is disconnected
+    // after adding a new node the Graph is disconnected
     // unless it's size was 0
     m_isConnected = (m_size == 1);
+
+    for(int i = 0; i < m_size - 1; i++)
+    {
+        m_VertexValues[i].push_back(T_vertex());
+    }
+    m_VertexValues.push_back(std::vector<T_vertex>(m_size));
+    m_NodeValues.push_back(value);
 }
 
-
-void Graph::remove(int id)
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::remove(int id)
 {
     m_size--;
     m_AdjacencyMatrix.erase(m_AdjacencyMatrix.begin()+id);
@@ -133,63 +153,85 @@ void Graph::remove(int id)
         m_AdjacencyMatrix[i].erase(m_AdjacencyMatrix[i].begin()+id);
     }
 
-    // after removing a node we check whether the graph is directed and/or disconnected 
+    // after removing a node we check whether the Graph is directed and/or disconnected 
     P_update();
+
+    m_NodeValues.erase(m_NodeValues.begin()+id);
+    m_VertexValues.erase(m_VertexValues.begin()+id);
+    for(int i = 0; i < m_size; i++)
+    {
+        m_VertexValues[i].erase(m_VertexValues[i].begin()+id);
+    }
 }
 
-
-void Graph::add(const Vertex &id, bool twoWay)
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::add(const Vertex &id, const T_vertex& value, bool twoWay)
 {
     m_AdjacencyMatrix[id.first][id.second] = true;
     if(twoWay)
         m_AdjacencyMatrix[id.second][id.first] = true;
 
-    // after adding a new vertex we check whether the graph is directed or/and disconnected
+    // after adding a new vertex we check whether the Graph is directed or/and disconnected
     P_update();
+
+    m_VertexValues[id.first][id.second] = value;
+    if(twoWay)
+        m_VertexValues[id.second][id.first] = value;
 }
 
-
-void Graph::remove(const Vertex &id, bool twoWay)
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::remove(const Vertex &id, bool twoWay)
 {
     m_AdjacencyMatrix[id.first][id.second] = false;
     if(twoWay)
         m_AdjacencyMatrix[id.first][id.second] = false;
 
-    // after removing a vertex we check whether the graph is directed or/and disconnected
+    // after removing a vertex we check whether the Graph is directed or/and disconnected
     P_update();
+
+    m_VertexValues[id.first][id.second] = T_vertex();
+    m_VertexValues[id.second][id.first] = T_vertex();
 }
 
-
-void Graph::clear()
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::clear()
 {
     m_AdjacencyMatrix.clear();
     m_isConnected = 1;
     m_isUndirected = 1;
     m_size = 0;
+
+    m_VertexValues.clear();
+    m_NodeValues.clear();
 }
 
 
 //==================variable getters====================
-unsigned int Graph::size() const
+template <class T_node, class T_vertex>
+unsigned int Graph<T_node,T_vertex>::size() const
 {
     return m_size;
 }
-bool Graph::is_undirected() const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::is_undirected() const
 {
     return m_isUndirected;
 }
-bool Graph::is_connected() const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::is_connected() const
 {
     return m_isConnected;
 }
-std::vector< std::vector< bool > > Graph::getAdjacencyMatrix() const
+template <class T_node, class T_vertex>
+std::vector< std::vector< bool > > Graph<T_node,T_vertex>::getAdjacencyMatrix() const
 {
     return m_AdjacencyMatrix;
 }
 
 
 //==================variable getters====================
-bool Graph::is_cyclic() const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::is_cyclic() const
 {
     std::vector<bool> visited(m_size,0);
     if(m_isUndirected)
@@ -219,8 +261,8 @@ bool Graph::is_cyclic() const
     return false;
 }
 
-
-int Graph::min_edge_count(const std::pair<int,int> &id) const
+template <class T_node, class T_vertex>
+int Graph<T_node,T_vertex>::min_edge_count(const std::pair<int,int> &id) const
 {
     std::vector<bool> visited(m_size, false);
     std::vector<int> distance(m_size, -1);
@@ -249,8 +291,8 @@ int Graph::min_edge_count(const std::pair<int,int> &id) const
     return distance[id.second];
 }
 
-
-std::vector<int> Graph::get_neighbors(int id) const
+template <class T_node, class T_vertex>
+std::vector<int> Graph<T_node,T_vertex>::get_neighbors(int id) const
 {
     std::vector<int> neighborList;
     for(unsigned int i = 0; i < m_size; i++)
@@ -263,8 +305,8 @@ std::vector<int> Graph::get_neighbors(int id) const
     return neighborList;
 }
 
-
-int Graph::num_of_paths(int id1, int id2, int of_length)
+template <class T_node, class T_vertex>
+int Graph<T_node,T_vertex>::num_of_paths(int id1, int id2, int of_length)
 {
     // to do
     std::vector<std::vector<int>> ret;
@@ -291,7 +333,8 @@ int Graph::num_of_paths(int id1, int id2, int of_length)
 
 
 //==================utility====================
-void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<bool>)> func,
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::traverse(TraverseAlgorithm alg, std::function<void(int, T_node, std::vector<bool>)> func,
     int startingPointID) const
 {
     switch(alg)
@@ -310,7 +353,7 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
         
                 if (!visited[id])
                 {
-                    func(id,m_AdjacencyMatrix[id]);
+                    func(id,m_NodeValues[id],m_AdjacencyMatrix[id]);
                     visited[id] = true;
                 }
         
@@ -329,13 +372,14 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
 
             to_visit.push(startingPointID);
             visited[startingPointID] = true;
+            int a = 1;
         
             while (!to_visit.empty())
             {
                 int id = to_visit.front();
                 to_visit.pop();
 
-                func(id,m_AdjacencyMatrix[id]);
+                func(id,m_NodeValues[id],m_AdjacencyMatrix[id]);
         
                 for(unsigned int i = 0; i < m_size; i++)
                 {
@@ -351,8 +395,8 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
     }
 }
 
-
-void Graph::print_adjacency_matrix() const
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::print_adjacency_matrix() const
 {
     for(unsigned int i = 0; i < m_size; i++)
     {
@@ -365,8 +409,32 @@ void Graph::print_adjacency_matrix() const
 }
 
 
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::print_node_values()
+{
+    for(int i = 0; i < m_size; i++)
+    {
+        std::cout << m_NodeValues[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::print_vertex_values()
+{
+    for(int i = 0; i < m_size; i++)
+    {
+        for(int j = 0; j < m_size; j++)
+            std::cout << m_VertexValues[i][j] << " ";
+        std::cout << std::endl;
+    }
+}
+
+
 //==================private utility functions====================
-std::vector<std::vector<int>> Graph::multiply_matrix(const std::vector<std::vector<int>> &a, const std::vector<std::vector<int>> &b) 
+template <class T_node, class T_vertex>
+std::vector<std::vector<int>> Graph<T_node,T_vertex>::multiply_matrix(const std::vector<std::vector<int>> &a, const std::vector<std::vector<int>> &b) 
 {
     int s = a.size();
 
@@ -389,8 +457,8 @@ std::vector<std::vector<int>> Graph::multiply_matrix(const std::vector<std::vect
     return ret;
 }
 
-
-bool Graph::P_is_undirected_check() const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::P_is_undirected_check() const
 {
     for(unsigned int i = 0; i < m_size; i++)
     {
@@ -403,8 +471,8 @@ bool Graph::P_is_undirected_check() const
     return true;
 }
 
-
-bool Graph::P_is_connected_check()
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::P_is_connected_check()
 {
     if(m_isUndirected)
     {
@@ -436,8 +504,8 @@ bool Graph::P_is_connected_check()
     return true;
 }
 
-
-bool Graph::P_is_cyclic_util(int v, std::vector <bool> &visited, unsigned int parent) const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::P_is_cyclic_util(int v, std::vector <bool> &visited, unsigned int parent) const
 {
     visited[v] = true;
 
@@ -459,8 +527,8 @@ bool Graph::P_is_cyclic_util(int v, std::vector <bool> &visited, unsigned int pa
     return false;
 }
 
-
-bool Graph::P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const
 {
     visited[v] = true;
     recStack[v] = true;
@@ -483,8 +551,8 @@ bool Graph::P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::v
     return false;
 }
 
-
-void Graph::P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const
 {
     std::queue<int> to_visit;
     to_visit.push(0);
@@ -505,22 +573,23 @@ void Graph::P_is_connected_check_util(std::vector <bool> &visited, bool reverse)
     }
 }
 
-
-void Graph::P_update()
+template <class T_node, class T_vertex>
+void Graph<T_node,T_vertex>::P_update()
 {
     m_isUndirected = P_is_undirected_check();
     m_isConnected = P_is_connected_check();
 }
 
-
-bool Graph::P_is_within_bounds(unsigned int id)
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::P_is_within_bounds(unsigned int id)
 {
     return (id >= 0 && id < m_size);
 }
 
 
 //==================operator overloads====================
-Graph Graph::operator | (Graph const &rhs)
+template <class T_node, class T_vertex>
+Graph<T_node,T_vertex> Graph<T_node,T_vertex>::operator | (Graph<T_node,T_vertex> const &rhs)
 {
     Graph lhs;
     lhs.m_AdjacencyMatrix = this->m_AdjacencyMatrix;
@@ -544,31 +613,49 @@ Graph Graph::operator | (Graph const &rhs)
     return lhs;
 }
 
-
-bool Graph::operator == (Graph const &rhs)
+template <class T_node, class T_vertex>
+bool Graph<T_node,T_vertex>::operator == (Graph const &rhs)
 {
     return this->m_AdjacencyMatrix == rhs.m_AdjacencyMatrix;
 }
 
+template <class T_node, class T_vertex>
+T_node& Graph<T_node,T_vertex>::operator[](int id)
+{
+    return m_NodeValues[id];
+}
+template <class T_node, class T_vertex>
+T_vertex& Graph<T_node,T_vertex>::operator[](Vertex id)
+{
+    if(!m_AdjacencyMatrix[id.first][id.second])
+        add(id,T_vertex(),false);
+    return m_VertexValues[id.first][id.second];
+}
 
 //==================contructors & destructors====================
-Graph::Graph() : m_size(0)
+template <class T_node, class T_vertex>
+Graph<T_node,T_vertex>::Graph() : m_size(0)
 {
     m_isUndirected = true;
     m_isConnected = true;
 }
 
-
-Graph::Graph(unsigned int _size) : m_size(_size)
+template <class T_node, class T_vertex>
+Graph<T_node,T_vertex>::Graph(unsigned int _size) : m_size(_size)
 {
     m_isUndirected = true;
     m_isConnected = (m_size <= 1);
     m_AdjacencyMatrix.resize(m_size, std::vector<bool>(m_size, false));
+
+    m_VertexValues.resize(m_size, std::vector<T_vertex>(m_size));
+    m_NodeValues.resize(m_size, T_node());
 }
 
-
-Graph::~Graph()
+template <class T_node, class T_vertex>
+Graph<T_node,T_vertex>::~Graph()
 {
     
 }
+
 };
+

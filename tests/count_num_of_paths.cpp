@@ -1,4 +1,4 @@
-#include "../src/weighted_graph.h"
+#include "../src/graph.hpp"
 #include <iostream>
 
 using namespace Grubre;
@@ -6,7 +6,7 @@ using namespace Grubre;
 int main()
 {
     // create a graph of size 4
-    Graph a(4);
+    Graph<int,int> a(4);
 
     // add vertices between nodes
     a.add({0,1});
