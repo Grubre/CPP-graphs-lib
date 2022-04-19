@@ -372,7 +372,6 @@ void Graph<T_node,T_vertex>::traverse(TraverseAlgorithm alg, std::function<void(
 
             to_visit.push(startingPointID);
             visited[startingPointID] = true;
-            int a = 1;
         
             while (!to_visit.empty())
             {
