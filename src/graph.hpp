@@ -594,6 +594,10 @@ Graph<T_node,T_vertex> Graph<T_node,T_vertex>::operator | (Graph<T_node,T_vertex
     Graph lhs;
     lhs.m_AdjacencyMatrix = this->m_AdjacencyMatrix;
     lhs.m_size = this->m_size;
+    lhs.m_NodeValues = this->m_NodeValues;
+    lhs.m_VertexValues = this->m_VertexValues;
+    lhs.m_NodeValues.insert(lhs.m_NodeValues.end(), rhs.m_NodeValues.begin(), rhs.m_NodeValues.end());
+    lhs.m_VertexValues.insert(lhs.m_VertexValues.end(), rhs.m_VertexValues.begin(), rhs.m_VertexValues.end());
     for(unsigned int i = 0; i < lhs.size(); i++)
     {
         for(unsigned int j = 0; j < rhs.m_size; j++)
