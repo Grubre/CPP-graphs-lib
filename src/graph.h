@@ -1,5 +1,4 @@
-#ifndef _GRAPH_H
-#define _GRAPH_H
+#pragma once
 ///////////////////////////////////////////////////////////////////
 // NAME:               graph.h
 //
@@ -84,12 +83,12 @@ private:
 
     void P_is_connected_check_util(std::vector <bool> &visited, bool reverse) const;
 
-    bool P_is_cyclic_util(int v, std::vector <bool> &visited, int parent) const;
+    bool P_is_cyclic_util(int v, std::vector <bool> &visited, unsigned int parent) const;
     bool P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::vector <bool> &recStack) const;
 
     void P_update();
 
-    bool P_is_within_bounds(int id);
+    bool P_is_within_bounds(unsigned int id);
 
 //operator overloads
 public:
@@ -112,7 +111,7 @@ protected:
 //==================setters====================
 void Graph::add()
 {
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
         m_AdjacencyMatrix[i].push_back(false);
     }
@@ -129,7 +128,7 @@ void Graph::remove(int id)
 {
     m_size--;
     m_AdjacencyMatrix.erase(m_AdjacencyMatrix.begin()+id);
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
         m_AdjacencyMatrix[i].erase(m_AdjacencyMatrix[i].begin()+id);
     }
@@ -196,7 +195,7 @@ bool Graph::is_cyclic() const
     if(m_isUndirected)
     {
         //std::cout << "is_cyclic Undirected" << std::endl;
-        for(int u = 0; u < m_size; u++)
+        for(unsigned int u = 0; u < m_size; u++)
         {
             if(!visited[u])
             {
@@ -208,7 +207,7 @@ bool Graph::is_cyclic() const
     else
     {
         std::vector<bool> recStack(m_size,0);
-        for(int u = 0; u < m_size; u++)
+        for(unsigned int u = 0; u < m_size; u++)
         {
             if(!visited[u])
             {
@@ -237,7 +236,7 @@ int Graph::min_edge_count(const std::pair<int,int> &id) const
         int id = to_visit.front();
         to_visit.pop();
 
-        for(int i = 0; i < m_size; i++)
+        for(unsigned int i = 0; i < m_size; i++)
         {
             if(visited[i] || !m_AdjacencyMatrix[id][i])
                 continue;
@@ -254,7 +253,7 @@ int Graph::min_edge_count(const std::pair<int,int> &id) const
 std::vector<int> Graph::get_neighbors(int id) const
 {
     std::vector<int> neighborList;
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
         if(m_AdjacencyMatrix[id][i])
         {
@@ -270,13 +269,13 @@ int Graph::num_of_paths(int id1, int id2, int of_length)
     // to do
     std::vector<std::vector<int>> ret;
     ret.resize(m_size,std::vector<int>(m_size,0));
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
         ret[i][i] = 1;
 
     std::vector<std::vector<int>> a;
     a.resize(m_size,std::vector<int>(m_size));
-    for(int i = 0; i < m_size; i++)
-        for(int j = 0; j < m_size; j++)
+    for(unsigned int i = 0; i < m_size; i++)
+        for(unsigned int j = 0; j < m_size; j++)
             a[i][j] = m_AdjacencyMatrix[i][j];
 
     while(of_length > 0)
@@ -315,7 +314,7 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
                     visited[id] = true;
                 }
         
-                for(int i = 0; i < m_size; i++)
+                for(unsigned int i = 0; i < m_size; i++)
                 {
                     if(!visited[i] && m_AdjacencyMatrix[id][i])
                         to_visit.push(i);
@@ -338,7 +337,7 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
 
                 func(id,m_AdjacencyMatrix[id]);
         
-                for(int i = 0; i < m_size; i++)
+                for(unsigned int i = 0; i < m_size; i++)
                 {
                     if(!visited[i] && m_AdjacencyMatrix[id][i])
                     {
@@ -355,9 +354,9 @@ void Graph::traverse(TraverseAlgorithm alg, std::function<void(int, std::vector<
 
 void Graph::print_adjacency_matrix() const
 {
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
-        for(int j = 0; j < m_size; j++)
+        for(unsigned int j = 0; j < m_size; j++)
         {
             std::cout << m_AdjacencyMatrix[i][j] << " ";
         }
@@ -393,9 +392,9 @@ std::vector<std::vector<int>> Graph::multiply_matrix(const std::vector<std::vect
 
 bool Graph::P_is_undirected_check() const
 {
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
-        for(int j = 0; j < m_size; j++)
+        for(unsigned int j = 0; j < m_size; j++)
         {
             if(m_AdjacencyMatrix[i][j] != m_AdjacencyMatrix[j][i])
                 return false;
@@ -412,7 +411,7 @@ bool Graph::P_is_connected_check()
         std::vector<bool> visited(m_size,false);
         P_is_connected_check_util(visited,false);
         
-        for(int i = 0; i < m_size; i++)
+        for(unsigned int i = 0; i < m_size; i++)
             if(!visited[i])
             {
                 m_isConnected = false;
@@ -426,7 +425,7 @@ bool Graph::P_is_connected_check()
         P_is_connected_check_util(visited1, false);
         P_is_connected_check_util(visited2, true);
 
-        for(int i = 0; i < m_size; i++)
+        for(unsigned int i = 0; i < m_size; i++)
             if(!visited1[i] && !visited2[i])
             {
                 m_isConnected = false;
@@ -438,11 +437,11 @@ bool Graph::P_is_connected_check()
 }
 
 
-bool Graph::P_is_cyclic_util(int v, std::vector <bool> &visited, int parent) const
+bool Graph::P_is_cyclic_util(int v, std::vector <bool> &visited, unsigned int parent) const
 {
     visited[v] = true;
 
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
         if(m_AdjacencyMatrix[v][i])
         {
@@ -465,7 +464,7 @@ bool Graph::P_is_cyclic_util_directed(int v, std::vector <bool> &visited, std::v
 {
     visited[v] = true;
     recStack[v] = true;
-    for(int i = 0; i < m_size; i++)
+    for(unsigned int i = 0; i < m_size; i++)
     {
         if(m_AdjacencyMatrix[v][i])
         {
@@ -494,7 +493,7 @@ void Graph::P_is_connected_check_util(std::vector <bool> &visited, bool reverse)
     {
         int id = to_visit.front();
         
-        for(int i = 0; i < m_size; i++)
+        for(unsigned int i = 0; i < m_size; i++)
         {
             if(!visited[i] && (m_AdjacencyMatrix[id][i] || (m_AdjacencyMatrix[i][id] && reverse)))
             {
@@ -514,7 +513,7 @@ void Graph::P_update()
 }
 
 
-bool Graph::P_is_within_bounds(int id)
+bool Graph::P_is_within_bounds(unsigned int id)
 {
     return (id >= 0 && id < m_size);
 }
@@ -526,15 +525,15 @@ Graph Graph::operator | (Graph const &rhs)
     Graph lhs;
     lhs.m_AdjacencyMatrix = this->m_AdjacencyMatrix;
     lhs.m_size = this->m_size;
-    for(int i = 0; i < lhs.size(); i++)
+    for(unsigned int i = 0; i < lhs.size(); i++)
     {
-        for(int j = 0; j < rhs.m_size; j++)
+        for(unsigned int j = 0; j < rhs.m_size; j++)
         {
             lhs.m_AdjacencyMatrix[i].push_back(false);
         }
     }
     std::vector<bool> prefix(lhs.m_size, false);
-    for(int j = 0; j < rhs.m_size; j++)
+    for(unsigned int j = 0; j < rhs.m_size; j++)
     {
         std::vector<bool> row(prefix);
         row.insert(row.end(), rhs.m_AdjacencyMatrix[j].begin(), rhs.m_AdjacencyMatrix[j].end());
@@ -573,4 +572,3 @@ Graph::~Graph()
     
 }
 };
-#endif //_GRAPH_H

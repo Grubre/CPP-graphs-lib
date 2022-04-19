@@ -16,11 +16,14 @@ int main()
     {
         std::cout << id << " ";
     };
-
+    
+    std::cout << "Graph a:\n";
+    a.print_adjacency_matrix();
+    std::cout << "Traversal using:\n";
     std::cout << "DFS: " << std::endl;;
     a.traverse(Graph::TraverseAlgorithm::DFS, lambdaPrint);
     std::cout << std::endl << "BFS: " << std::endl;;
     a.traverse(Graph::TraverseAlgorithm::BFS, lambdaPrint);
-    
+    std::cout << std::endl;
     return 0;
 }
